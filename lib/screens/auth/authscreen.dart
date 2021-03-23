@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:workout_app/const/const.dart';
-import 'package:workout_app/shared/bgimg.dart';
+import 'package:workout_app/screens/home/homescreen.dart';
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -10,6 +10,8 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _pswdController = TextEditingController();
+  // String _email;
+  // String _pswd;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class _AuthScreenState extends State<AuthScreen> {
             child: Text(
               'FIT',
               style: TextStyle(
-                  fontSize: 45,
+                  fontSize: 50,
                   fontWeight: FontWeight.bold,
                   color: Colors.white),
             ),
@@ -60,8 +62,24 @@ class _AuthScreenState extends State<AuthScreen> {
       );
     }
 
-    Widget _button() {
-      return Container();
+    Widget _button(void func()) {
+      return RaisedButton(
+        splashColor: Colors.white,
+        highlightColor: Colors.white,
+        color: MainColor,
+        child: Text('login',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.black,
+            )),
+        onPressed: () {
+          Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+        },
+      );
     }
 
     Widget _form(String lable, void func()) {
@@ -86,11 +104,22 @@ class _AuthScreenState extends State<AuthScreen> {
               child: Container(
                 height: 50,
                 width: MediaQuery.of(context).size.width,
-                child: _button(),
+                child: _button(() {}),
               ),
             )
           ],
         ),
+      );
+    }
+
+    void _loginFunc() {
+      // _email = _emailController.text;
+      // _pswd = _pswdController.text;
+      // _emailController.clear();
+      // _pswdController.clear();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
       );
     }
 
@@ -104,7 +133,7 @@ class _AuthScreenState extends State<AuthScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Column(
-          children: <Widget>[_logo(), _form('login', () {})],
+          children: <Widget>[_logo(), _form('login', _loginFunc)],
         ),
       ),
     );

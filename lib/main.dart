@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:workout_app/screens/auth/authscreen.dart';
-import 'package:workout_app/screens/home/homescreen.dart';
 
 void main() {
   runApp(FitApp());

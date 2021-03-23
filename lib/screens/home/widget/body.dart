@@ -27,7 +27,7 @@ class MainText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SafeArea(
       /// width: double.infinity,
       child: Column(
         children: [
