@@ -3,15 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:workout_app/const/const.dart';
-import 'package:workout_app/screens/auth/register/registerscreen.dart';
+import 'package:workout_app/models/user-reg.dart';
 import 'package:workout_app/screens/home/homescreen.dart';
 import 'package:http/http.dart' as http;
-
-class User {
-  final String email;
-  final String password;
-  User({this.email, this.password});
-}
 
 Future<User> postData(String email, String password) async {
   final resp = await http.post(
@@ -28,15 +22,18 @@ Future<User> postData(String email, String password) async {
   } else {}
 }
 
-class AuthScreen extends StatefulWidget {
+class RegScreen extends StatefulWidget {
   @override
-  _AuthScreenState createState() => _AuthScreenState();
+  _RegScreenState createState() => _RegScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _RegScreenState extends State<RegScreen> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  final _user = User();
+  var _trainer = false;
   TextEditingController _emailController = TextEditingController();
   TextEditingController _pswdController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     Widget _logo() {
@@ -92,6 +89,42 @@ class _AuthScreenState extends State<AuthScreen> {
       );
     }
 
+    Widget _inputName() {
+      return Container(
+        padding: EdgeInsets.only(left: 20, right: 20),
+        child: TextFormField(
+          controller: _nameController,
+          obscureText: false,
+          style: TextStyle(fontSize: 20, color: Colors.white),
+          decoration: InputDecoration(
+              hintStyle: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white30),
+              hintText: 'name',
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MainColor, width: 3),
+              ),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: MainColor30, width: 1)),
+              prefixIcon: Padding(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: IconTheme(
+                  data: IconThemeData(color: Colors.white),
+                  child: Icon(Icons.account_circle),
+                ),
+              )),
+          validator: MultiValidator([
+            RequiredValidator(errorText: "* Required"),
+            MinLengthValidator(6,
+                errorText: "Name should be atleast 6 characters"),
+            MaxLengthValidator(15,
+                errorText: "Name should not be greater than 15 characters")
+          ]),
+        ),
+      );
+    }
+
     Widget _inputEmail() {
       return Container(
           padding: EdgeInsets.only(left: 20, right: 20),
@@ -124,12 +157,31 @@ class _AuthScreenState extends State<AuthScreen> {
           ));
     }
 
+    Widget _switch() {
+      return SwitchListTile(
+        title: Text(
+          'trainer?',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+        value: _trainer,
+        activeColor: MainColor,
+        onChanged: (bool value) {
+          setState(() => _trainer = value);
+          print(_trainer);
+        },
+      );
+    }
+
     Widget _button(void func()) {
       return RaisedButton(
         splashColor: Colors.white,
         highlightColor: Colors.white,
         color: MainColor,
-        child: Text('login',
+        child: Text('Register',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
@@ -158,6 +210,9 @@ class _AuthScreenState extends State<AuthScreen> {
           children: <Widget>[
             Padding(
                 padding: EdgeInsets.only(bottom: 20, top: 10),
+                child: _inputName()),
+            Padding(
+                padding: EdgeInsets.only(bottom: 20, top: 10),
                 child: _inputEmail()),
             Padding(
               padding: EdgeInsets.only(
@@ -165,6 +220,9 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               child: _inputPswd(),
             ),
+            Padding(
+                padding: EdgeInsets.only(bottom: 20, top: 10),
+                child: _switch()),
             SizedBox(
               height: 20,
             ),
@@ -194,23 +252,7 @@ class _AuthScreenState extends State<AuthScreen> {
           children: <Widget>[
             _logo(),
             _form(
-              'login',
-            ),
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: GestureDetector(
-                child: Text(
-                  'not registered yet? Register',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => RegScreen()),
-                  );
-                },
-              ),
+              'register',
             )
           ],
         ),
