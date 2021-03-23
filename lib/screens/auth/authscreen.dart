@@ -1,6 +1,32 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:workout_app/const/const.dart';
 import 'package:workout_app/screens/home/homescreen.dart';
+import 'package:http/http.dart' as http;
+
+class User {
+  final String email;
+  final String password;
+
+  User({this.email, this.password});
+}
+
+Future<User> postData(String email, String password) async {
+  final resp = await http.post(
+    Uri.http(ApiLogin, 'typicode/demo/posts'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'title': email,
+    }),
+  );
+  if (resp.statusCode == 201) {
+  } else {
+    throw Exception('Failed to login.');
+  }
+}
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -10,8 +36,8 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _pswdController = TextEditingController();
-  // String _email;
-  // String _pswd;
+  String email;
+  String pswd;
 
   @override
   Widget build(BuildContext context) {
@@ -74,10 +100,16 @@ class _AuthScreenState extends State<AuthScreen> {
               color: Colors.black,
             )),
         onPressed: () {
-          Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
+          email = _emailController.text;
+          pswd = _pswdController.text;
+          _emailController.clear();
+          _pswdController.clear();
+          postData(email, pswd);
+
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => HomeScreen()),
+          // );
         },
       );
     }
@@ -113,14 +145,15 @@ class _AuthScreenState extends State<AuthScreen> {
     }
 
     void _loginFunc() {
-      // _email = _emailController.text;
-      // _pswd = _pswdController.text;
-      // _emailController.clear();
-      // _pswdController.clear();
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
+      email = _emailController.text;
+      pswd = _pswdController.text;
+      _emailController.clear();
+      _pswdController.clear();
+      postData(email, pswd);
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => HomeScreen()),
+      // );
     }
 
     return Container(
