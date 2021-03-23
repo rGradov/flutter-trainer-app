@@ -16,6 +16,8 @@ dependencies:
   intl: 
   intl_translation: 
   http: ^0.13.1
+  form_field_validator: ^1.0.1
+
 
 dev_dependencies:
   flutter_test:

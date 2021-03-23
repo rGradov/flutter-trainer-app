@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:workout_app/const/const.dart';
 import 'package:workout_app/screens/home/homescreen.dart';
 import 'package:http/http.dart' as http;
@@ -8,7 +9,6 @@ import 'package:http/http.dart' as http;
 class User {
   final String email;
   final String password;
-
   User({this.email, this.password});
 }
 
@@ -19,13 +19,12 @@ Future<User> postData(String email, String password) async {
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: jsonEncode(<String, String>{
-      'title': email,
+      'email': email,
+      'password': password,
     }),
   );
   if (resp.statusCode == 201) {
-  } else {
-    throw Exception('Failed to login.');
-  }
+  } else {}
 }
 
 class AuthScreen extends StatefulWidget {
@@ -34,11 +33,9 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  GlobalKey<FormState> formkey = GlobalKey<FormState>();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _pswdController = TextEditingController();
-  String email;
-  String pswd;
-
   @override
   Widget build(BuildContext context) {
     Widget _logo() {
@@ -47,7 +44,7 @@ class _AuthScreenState extends State<AuthScreen> {
         child: Container(
           child: Align(
             child: Text(
-              'FIT',
+              LoginPageMainText,
               style: TextStyle(
                   fontSize: 50,
                   fontWeight: FontWeight.bold,
@@ -58,34 +55,72 @@ class _AuthScreenState extends State<AuthScreen> {
       );
     }
 
-    Widget _input(
-        Icon icon, String hint, TextEditingController controller, bool secure) {
+    Widget _inputPswd() {
       return Container(
         padding: EdgeInsets.only(left: 20, right: 20),
-        child: TextField(
-          controller: controller,
-          obscureText: secure,
-          style: TextStyle(fontSize: 20, color: Colors.white),
-          decoration: InputDecoration(
-              hintStyle: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white30),
-              hintText: hint,
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MainColor, width: 3),
-              ),
-              enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: MainColor30, width: 1)),
-              prefixIcon: Padding(
-                padding: EdgeInsets.only(left: 10, right: 10),
-                child: IconTheme(
-                  data: IconThemeData(color: Colors.white),
-                  child: icon,
+        child: TextFormField(
+            controller: _pswdController,
+            obscureText: false,
+            style: TextStyle(fontSize: 20, color: Colors.white),
+            decoration: InputDecoration(
+                hintStyle: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white30),
+                hintText: 'pswd',
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: MainColor, width: 3),
                 ),
-              )),
-        ),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: MainColor30, width: 1)),
+                prefixIcon: Padding(
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: IconTheme(
+                    data: IconThemeData(color: Colors.white),
+                    child: Icon(Icons.lock),
+                  ),
+                )),
+            validator: MultiValidator([
+              RequiredValidator(errorText: "* Required"),
+              MinLengthValidator(6,
+                  errorText: "Password should be atleast 6 characters"),
+              MaxLengthValidator(15,
+                  errorText:
+                      "Password should not be greater than 15 characters")
+            ])),
       );
+    }
+
+    Widget _inputEmail() {
+      return Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child: TextFormField(
+            controller: _emailController,
+            obscureText: false,
+            style: TextStyle(fontSize: 20, color: Colors.white),
+            decoration: InputDecoration(
+                hintStyle: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white30),
+                hintText: 'email',
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: MainColor, width: 3),
+                ),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: MainColor30, width: 1)),
+                prefixIcon: Padding(
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: IconTheme(
+                    data: IconThemeData(color: Colors.white),
+                    child: Icon(Icons.email),
+                  ),
+                )),
+            validator: MultiValidator([
+              RequiredValidator(errorText: "* Required"),
+              EmailValidator(errorText: "Enter valid email id"),
+            ]),
+          ));
     }
 
     Widget _button(void func()) {
@@ -100,33 +135,34 @@ class _AuthScreenState extends State<AuthScreen> {
               color: Colors.black,
             )),
         onPressed: () {
-          email = _emailController.text;
-          pswd = _pswdController.text;
-          _emailController.clear();
-          _pswdController.clear();
-          postData(email, pswd);
+          if (formkey.currentState.validate()) {
+            postData(_emailController.text, _pswdController.text);
 
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => HomeScreen()),
-          // );
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+            );
+
+            formkey.currentState.reset();
+          }
         },
       );
     }
 
-    Widget _form(String lable, void func()) {
-      return Container(
+    Widget _form(String lable) {
+      return Form(
+        autovalidate: true,
+        key: formkey,
         child: Column(
           children: <Widget>[
             Padding(
                 padding: EdgeInsets.only(bottom: 20, top: 10),
-                child: _input(
-                    Icon(Icons.email), "email", _emailController, false)),
+                child: _inputEmail()),
             Padding(
               padding: EdgeInsets.only(
                 bottom: 20,
               ),
-              child: _input(Icon(Icons.lock), "pswd", _pswdController, true),
+              child: _inputPswd(),
             ),
             SizedBox(
               height: 20,
@@ -144,18 +180,6 @@ class _AuthScreenState extends State<AuthScreen> {
       );
     }
 
-    void _loginFunc() {
-      email = _emailController.text;
-      pswd = _pswdController.text;
-      _emailController.clear();
-      _pswdController.clear();
-      postData(email, pswd);
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => HomeScreen()),
-      // );
-    }
-
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -166,7 +190,12 @@ class _AuthScreenState extends State<AuthScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Column(
-          children: <Widget>[_logo(), _form('login', _loginFunc)],
+          children: <Widget>[
+            _logo(),
+            _form(
+              'login',
+            )
+          ],
         ),
       ),
     );

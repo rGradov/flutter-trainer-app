@@ -5,3 +5,5 @@ const MainColor = Color.fromRGBO(23, 226, 9, 1);
 const MainColor30 = Color.fromRGBO(23, 226, 9, 0.3);
 
 const ApiLogin = 'jsonplaceholder.typicode.com';
+
+const LoginPageMainText = 'FIT';
