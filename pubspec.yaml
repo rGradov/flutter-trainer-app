@@ -15,6 +15,7 @@ dependencies:
     sdk: flutter
   intl: 
   intl_translation: 
+  neon: ^0.0.1
 
 dev_dependencies:
   flutter_test:
@@ -25,3 +26,5 @@ dependency_overrides:
   #https://stackoverflow.com/questions/65369313/package-incompatible-version-after-upgrading-flutter
 flutter:
   uses-material-design: true
+  assets:
+    - assets/background.jpg
