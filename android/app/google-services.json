@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "817951599832",
+    "project_id": "fit-app-107f6",
+    "storage_bucket": "fit-app-107f6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:817951599832:android:36f101c034d581208f3bad",
+        "android_client_info": {
+          "package_name": "com.example.workout_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "817951599832-caoplnl0kbffjep3870mu06mld0kmcuh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKJn6qhkx7iKhq_7oKH2t5MfI9gCpm4x0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "817951599832-caoplnl0kbffjep3870mu06mld0kmcuh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

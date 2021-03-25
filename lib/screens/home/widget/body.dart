@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:workout_app/const/const.dart';
 
 class Body extends StatelessWidget {
@@ -28,7 +28,6 @@ class MainText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      /// width: double.infinity,
       child: Column(
         children: [
           new Expanded(
@@ -37,11 +36,9 @@ class MainText extends StatelessWidget {
           ),
           new Expanded(
             child: Column(
-              //mainAxisAlignment:MainAxisAlignment.,
-              
-              children: [
-              Navigations()
-            ] ),
+                //mainAxisAlignment:MainAxisAlignment.,
+
+                children: [Navigations()]),
             flex: 2,
           )
         ],
@@ -60,7 +57,7 @@ class HeaderTxt extends StatelessWidget {
     return Column(
       children: [
         Text(
-          'Тренеру',
+          "trainer".tr().toString(),
           // text
           textAlign: TextAlign.center,
           style: TextStyle(
@@ -92,15 +89,15 @@ class Navigations extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text(
-          'Оплаты',
+          "payment".tr().toString(),
           style: textStyle,
         ),
         Text(
-          'Рассписание',
+          "timetable".tr().toString(),
           style: textStyle,
         ),
         Text(
-          'Статистика',
+          'Statistics'.tr().toString(),
           style: textStyle,
         ),
       ],

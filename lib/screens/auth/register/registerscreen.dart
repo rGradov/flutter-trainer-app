@@ -1,6 +1,7 @@
 import 'dart:convert';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:workout_app/const/const.dart';
 import 'package:workout_app/models/user-reg.dart';
@@ -42,7 +43,7 @@ class _RegScreenState extends State<RegScreen> {
         child: Container(
           child: Align(
             child: Text(
-              LoginPageMainText,
+              "main-title".tr().toString(),
               style: TextStyle(
                   fontSize: 50,
                   fontWeight: FontWeight.bold,
@@ -65,7 +66,7 @@ class _RegScreenState extends State<RegScreen> {
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white30),
-                hintText: 'pswd',
+                hintText: "hint-pswd".tr().toString(),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: MainColor, width: 3),
                 ),
@@ -79,12 +80,11 @@ class _RegScreenState extends State<RegScreen> {
                   ),
                 )),
             validator: MultiValidator([
-              RequiredValidator(errorText: "* Required"),
+              RequiredValidator(errorText: "erorr-req".tr().toString()),
               MinLengthValidator(6,
-                  errorText: "Password should be atleast 6 characters"),
+                  errorText: "pswd-error-min-length".tr().toString()),
               MaxLengthValidator(15,
-                  errorText:
-                      "Password should not be greater than 15 characters")
+                  errorText: "pswd-error-max-length".tr().toString())
             ])),
       );
     }
@@ -101,7 +101,7 @@ class _RegScreenState extends State<RegScreen> {
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.white30),
-              hintText: 'name',
+              hintText: "hint-name".tr().toString(),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: MainColor, width: 3),
               ),
@@ -115,11 +115,11 @@ class _RegScreenState extends State<RegScreen> {
                 ),
               )),
           validator: MultiValidator([
-            RequiredValidator(errorText: "* Required"),
-            MinLengthValidator(6,
-                errorText: "Name should be atleast 6 characters"),
+            RequiredValidator(errorText: "erorr-req".tr().toString()),
+            MinLengthValidator(2,
+                errorText: "error-name-min-length".tr().toString()),
             MaxLengthValidator(15,
-                errorText: "Name should not be greater than 15 characters")
+                errorText: "error-name-max-length".tr().toString())
           ]),
         ),
       );
@@ -137,7 +137,7 @@ class _RegScreenState extends State<RegScreen> {
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white30),
-                hintText: 'email',
+                hintText: "hint-email".tr().toString(),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: MainColor, width: 3),
                 ),
@@ -151,8 +151,8 @@ class _RegScreenState extends State<RegScreen> {
                   ),
                 )),
             validator: MultiValidator([
-              RequiredValidator(errorText: "* Required"),
-              EmailValidator(errorText: "Enter valid email id"),
+              RequiredValidator(errorText: "erorr-req".tr().toString()),
+              EmailValidator(errorText: "erorr-req".tr().toString()),
             ]),
           ));
     }
@@ -160,7 +160,7 @@ class _RegScreenState extends State<RegScreen> {
     Widget _switch() {
       return SwitchListTile(
         title: Text(
-          'trainer?',
+          "${'trainer'.tr().toString()}?",
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -181,7 +181,7 @@ class _RegScreenState extends State<RegScreen> {
         splashColor: Colors.white,
         highlightColor: Colors.white,
         color: MainColor,
-        child: Text('Register',
+        child: Text("reg-btn-text".tr().toString(),
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
@@ -204,7 +204,7 @@ class _RegScreenState extends State<RegScreen> {
 
     Widget _form(String lable) {
       return Form(
-        autovalidate: true,
+        // autovalidate: true,
         key: formkey,
         child: Column(
           children: <Widget>[
@@ -221,19 +221,19 @@ class _RegScreenState extends State<RegScreen> {
               child: _inputPswd(),
             ),
             Padding(
-                padding: EdgeInsets.only(bottom: 20, top: 10),
-                child: _switch()),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
               padding: EdgeInsets.only(left: 20, right: 20),
               child: Container(
                 height: 50,
                 width: MediaQuery.of(context).size.width,
                 child: _button(() {}),
               ),
-            )
+            ),
+            Padding(
+                padding: EdgeInsets.only(bottom: 20, top: 10),
+                child: _switch()),
+            SizedBox(
+              height: 20,
+            ),
           ],
         ),
       );
@@ -253,7 +253,7 @@ class _RegScreenState extends State<RegScreen> {
             _logo(),
             _form(
               'register',
-            )
+            ),
           ],
         ),
       ),

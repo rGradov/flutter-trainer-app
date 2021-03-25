@@ -17,6 +17,11 @@ dependencies:
   intl_translation: 
   http: ^0.13.1
   form_field_validator: ^1.0.1
+  font_awesome_flutter: ^8.10.0
+  google_sign_in: ^5.0.0
+  easy_localization: 
+  localstorage: ^3.0.6 
+  shared_preferences: ^0.5.8
 
 
 dev_dependencies:
@@ -30,3 +35,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/background.jpg
+    - assets/translations/

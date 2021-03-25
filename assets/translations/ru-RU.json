@@ -1,0 +1,22 @@
+{
+  "reg-btn-text": "Регистрация",
+  "login-btn-text": "Вход",
+  "btn-google-signIn": "войти с помощью Google",
+  "error-valid-email": "введите корректную почту",
+  "erorr-req": "поле должно быть заполнено",
+  "error-name-min-length": "имя не может быть меньше 2-ух символов",
+  "error-name-max-length": "имя не может быть больше 15 символов",
+  "pswd-error-min-length": "пароль не может быть меньше 6 символов",
+  "pswd-error-max-length": "пароль не должен быть больше 15 символов",
+  "hint-pswd": "Пароль",
+  "hint-email": "Почта",
+  "hint-name": "Имя",
+  "main-title": "FIT",
+  "not-reg-btn": "Зарегистрироваться",
+  "trainer": "тренер",
+  "payment": "оплата",
+  "timetable": "рассписание",
+  "Statistics": "Статистика",
+  "valid-email": "введите корректную почту",
+  "valid-pswd": "Введите корректный пароль "
+}

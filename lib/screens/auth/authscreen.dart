@@ -1,11 +1,15 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:workout_app/const/const.dart';
 import 'package:workout_app/screens/auth/register/registerscreen.dart';
 import 'package:workout_app/screens/home/homescreen.dart';
 import 'package:http/http.dart' as http;
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class User {
   final String email;
@@ -33,10 +37,52 @@ class AuthScreen extends StatefulWidget {
   _AuthScreenState createState() => _AuthScreenState();
 }
 
+List languageCode = ["en", "ru"];
+List countryCode = ["US", "RU"];
+
 class _AuthScreenState extends State<AuthScreen> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+  bool _isLoggedIn = false;
   TextEditingController _emailController = TextEditingController();
   TextEditingController _pswdController = TextEditingController();
+
+  var userTrainer = new User();
+
+  static String userEmail = 'trainer@gmail.com';
+  static String userPswd = 'trainer';
+
+  _login() async {
+    print('try login');
+    try {
+      await _googleSignIn.signIn().then((value) => {
+            if (_isLoggedIn = true)
+              {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                )
+              }
+          });
+      setState(() {
+        _isLoggedIn = true;
+      });
+      print(_googleSignIn.currentUser.email);
+
+      print('login');
+    } catch (err) {
+      print('errors:');
+      print(err);
+    }
+  }
+
+  _logout() {
+    _googleSignIn.signOut();
+    setState(() {
+      _isLoggedIn = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget _logo() {
@@ -45,7 +91,7 @@ class _AuthScreenState extends State<AuthScreen> {
         child: Container(
           child: Align(
             child: Text(
-              LoginPageMainText,
+              "main-title".tr().toString(),
               style: TextStyle(
                   fontSize: 50,
                   fontWeight: FontWeight.bold,
@@ -68,7 +114,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white30),
-                hintText: 'pswd',
+                hintText: "hint-pswd".tr().toString(),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: MainColor, width: 3),
                 ),
@@ -82,12 +128,11 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                 )),
             validator: MultiValidator([
-              RequiredValidator(errorText: "* Required"),
+              RequiredValidator(errorText: "erorr-req".tr().toString()),
               MinLengthValidator(6,
-                  errorText: "Password should be atleast 6 characters"),
+                  errorText: "pswd-error-min-length".tr().toString()),
               MaxLengthValidator(15,
-                  errorText:
-                      "Password should not be greater than 15 characters")
+                  errorText: "pswd-error-max-length".tr().toString())
             ])),
       );
     }
@@ -104,7 +149,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white30),
-                hintText: 'email',
+                hintText: "hint-email".tr().toString(),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: MainColor, width: 3),
                 ),
@@ -118,10 +163,31 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                 )),
             validator: MultiValidator([
-              RequiredValidator(errorText: "* Required"),
-              EmailValidator(errorText: "Enter valid email id"),
+              RequiredValidator(errorText: "erorr-req".tr().toString()),
+              EmailValidator(errorText: "error-valid-email".tr().toString()),
             ]),
           ));
+    }
+
+    Widget _btnSigIn(void func()) {
+      return OutlineButton.icon(
+          splashColor: Colors.white,
+          highlightColor: Colors.white,
+          focusColor: Colors.greenAccent,
+          borderSide: BorderSide(
+            color: MainColor30,
+          ),
+          color: MainColor,
+          label: Text(
+            "btn-google-signIn".tr().toString(),
+            style: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white),
+          ),
+          icon: FaIcon(FontAwesomeIcons.google, color: Colors.red),
+          onPressed: () {
+            _logout();
+            _login();
+          });
     }
 
     Widget _button(void func()) {
@@ -129,7 +195,7 @@ class _AuthScreenState extends State<AuthScreen> {
         splashColor: Colors.white,
         highlightColor: Colors.white,
         color: MainColor,
-        child: Text('login',
+        child: Text("${"login-btn-text".tr().toString()}",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
@@ -138,13 +204,46 @@ class _AuthScreenState extends State<AuthScreen> {
         onPressed: () {
           if (formkey.currentState.validate()) {
             postData(_emailController.text, _pswdController.text);
+            if (_emailController.text == userEmail) {
+              print('correct email');
+              if (_pswdController.text == userPswd) {
+                print('work');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                );
+                formkey.currentState.reset();
+              } else {
+                final snackBar = SnackBar(
+                  content: Text("valid-pswd".tr().toString()),
+                  action: SnackBarAction(
+                    label: 'ok',
+                    onPressed: () {
+                      // formkey.currentState.reset();
+                      _pswdController.clear();
+                    },
+                  ),
+                );
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomeScreen()),
-            );
+                // Find the ScaffoldMessenger in the widget tree
+                // and use it to show a SnackBar.
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+            } else {
+              final snackBar = SnackBar(
+                content: Text("valid-email".tr().toString()),
+                action: SnackBarAction(
+                  label: 'ok',
+                  onPressed: () {
+                    formkey.currentState.reset();
+                  },
+                ),
+              );
 
-            formkey.currentState.reset();
+              // Find the ScaffoldMessenger in the widget tree
+              // and use it to show a SnackBar.
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
           }
         },
       );
@@ -152,7 +251,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
     Widget _form(String lable) {
       return Form(
-        autovalidate: true,
+        // autovalidate: true,
         key: formkey,
         child: Column(
           children: <Widget>[
@@ -175,7 +274,10 @@ class _AuthScreenState extends State<AuthScreen> {
                 width: MediaQuery.of(context).size.width,
                 child: _button(() {}),
               ),
-            )
+            ),
+            SizedBox(
+              height: 20,
+            ),
           ],
         ),
       );
@@ -197,10 +299,18 @@ class _AuthScreenState extends State<AuthScreen> {
               'login',
             ),
             Padding(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: Container(
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                child: _btnSigIn(() {}),
+              ),
+            ),
+            Padding(
               padding: EdgeInsets.all(10),
               child: GestureDetector(
                 child: Text(
-                  'not registered yet? Register',
+                  "not-reg-btn".tr().toString(),
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold),
                 ),

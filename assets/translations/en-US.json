@@ -1,0 +1,22 @@
+{
+  "reg-btn-text": "Register",
+  "login-btn-text": "Login",
+  "btn-google-signIn": "sigup with google",
+  "error-valid-email": "Enter valid email id",
+  "error-name-min-length": "Name should be atleast 2 characters",
+  "error-name-max-length": "Name should not be greater than 15 characters",
+  "erorr-req": "Required",
+  "pswd-error-min-length": "Password should be atleast 6 characters",
+  "pswd-error-max-length": "Password should not be greater than 15 characters",
+  "hint-pswd": "Password",
+  "hint-email": "Email",
+  "hint-name": "name",
+  "main-title": "FIT",
+  "not-reg-btn": "not registered yet? Register",
+  "trainer": "trainer",
+  "payment": "payment",
+  "timetable": "timetable",
+  "Statistics": "Statistics",
+  "valid-email": "Input correct email",
+  "valid-pswd": "Input coorect password"
+}
