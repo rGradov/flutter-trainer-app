@@ -18,5 +18,6 @@
   "timetable": "timetable",
   "Statistics": "Statistics",
   "valid-email": "Input correct email",
-  "valid-pswd": "Input coorect password"
+  "valid-pswd": "Input coorect password",
+  "btn-change-lang": "Set locale to"
 }

@@ -247,6 +247,26 @@ class _RegScreenState extends State<RegScreen> {
         ),
       ),
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.g_translate,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                print(context.locale);
+                if (context.locale.toString() == 'en_US') {
+                  context.locale = Locale("ru", "RU");
+                } else {
+                  context.locale = Locale('en', 'US');
+                }
+              },
+            )
+          ],
+        ),
+    
         backgroundColor: Colors.transparent,
         body: Column(
           children: <Widget>[
