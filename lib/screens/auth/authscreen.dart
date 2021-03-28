@@ -206,13 +206,14 @@ class _AuthScreenState extends State<AuthScreen> {
             postData(_emailController.text, _pswdController.text);
             if (_emailController.text == userEmail) {
               print('correct email');
+
               if (_pswdController.text == userPswd) {
                 print('work');
+                formkey.currentState.reset();
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => HomeScreen()),
                 );
-                formkey.currentState.reset();
               } else {
                 final snackBar = SnackBar(
                   content: Text("valid-pswd".tr().toString()),
@@ -235,6 +236,8 @@ class _AuthScreenState extends State<AuthScreen> {
                 action: SnackBarAction(
                   label: 'ok',
                   onPressed: () {
+                    _pswdController.clear();
+                    _emailController.clear();
                     formkey.currentState.reset();
                   },
                 ),

@@ -22,6 +22,7 @@ dependencies:
   easy_localization: 
   localstorage: ^3.0.6 
   shared_preferences: ^0.5.8
+  table_calendar: ^2.3.3
 
 
 dev_dependencies:

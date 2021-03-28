@@ -152,7 +152,7 @@ class _RegScreenState extends State<RegScreen> {
                 )),
             validator: MultiValidator([
               RequiredValidator(errorText: "erorr-req".tr().toString()),
-              EmailValidator(errorText: "erorr-req".tr().toString()),
+              EmailValidator(errorText: "error-valid-email".tr().toString()),
             ]),
           ));
     }
