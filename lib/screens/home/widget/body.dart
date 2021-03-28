@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:workout_app/const/const.dart';
+import 'package:workout_app/screens/timetable/timetablescreen.dart';
 
 class Body extends StatelessWidget {
   const Body({
@@ -92,13 +93,20 @@ class Navigations extends StatelessWidget {
           "payment".tr().toString(),
           style: textStyle,
         ),
-        Text(
-          "timetable".tr().toString(),
-          style: textStyle,
-        ),
-        Text(
-          'Statistics'.tr().toString(),
-          style: textStyle,
+        Padding(
+          padding: EdgeInsets.all(10),
+          child: GestureDetector(
+                child: Text(
+                  "timetable".tr().toString(),
+                  style:textStyle),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TimetableScreen()),
+                  );
+                },
+              ),
+      
         ),
       ],
     );
