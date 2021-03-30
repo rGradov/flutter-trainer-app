@@ -13,6 +13,7 @@
   "hint-name": "name",
   "main-title": "FIT",
   "not-reg-btn": "not registered yet? Register",
+  "not-login-btn": "already have account? login",
   "trainer": "trainer",
   "payment": "payment",
   "timetable": "timetable",

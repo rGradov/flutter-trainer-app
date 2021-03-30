@@ -1,13 +1,17 @@
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:workout_app/const/const.dart';
-import 'package:workout_app/models/user-reg.dart';
 import 'package:workout_app/screens/home/homescreen.dart';
 import 'package:http/http.dart' as http;
+import 'package:workout_app/screens/auth/authscreen.dart';
 
+class User {
+  final String email;
+  final String password;
+  User({this.email, this.password});
+}
 Future<User> postData(String email, String password) async {
   final resp = await http.post(
     Uri.http(ApiLogin, 'typicode/demo/posts'),
@@ -59,7 +63,7 @@ class _RegScreenState extends State<RegScreen> {
         padding: EdgeInsets.only(left: 20, right: 20),
         child: TextFormField(
             controller: _pswdController,
-            obscureText: false,
+            obscureText: true,
             style: TextStyle(fontSize: 20, color: Colors.white),
             decoration: InputDecoration(
                 hintStyle: TextStyle(
@@ -221,6 +225,9 @@ class _RegScreenState extends State<RegScreen> {
               child: _inputPswd(),
             ),
             Padding(
+                padding: EdgeInsets.only(bottom: 20, top: 10),
+                child: _switch()),
+            Padding(
               padding: EdgeInsets.only(left: 20, right: 20),
               child: Container(
                 height: 50,
@@ -228,11 +235,24 @@ class _RegScreenState extends State<RegScreen> {
                 child: _button(() {}),
               ),
             ),
-            Padding(
-                padding: EdgeInsets.only(bottom: 20, top: 10),
-                child: _switch()),
             SizedBox(
-              height: 20,
+              height: 5,
+            ),
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: GestureDetector(
+                child: Text(
+                  "not-login-btn".tr().toString(),
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AuthScreen()),
+                  );
+                },
+              ),
             ),
           ],
         ),
@@ -249,6 +269,7 @@ class _RegScreenState extends State<RegScreen> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
           actions: [
             IconButton(
               icon: Icon(
@@ -266,7 +287,6 @@ class _RegScreenState extends State<RegScreen> {
             )
           ],
         ),
-    
         backgroundColor: Colors.transparent,
         body: Column(
           children: <Widget>[

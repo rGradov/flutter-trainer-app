@@ -1,15 +1,11 @@
 import 'dart:convert';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:workout_app/const/const.dart';
 import 'package:workout_app/screens/auth/register/registerscreen.dart';
 import 'package:workout_app/screens/home/homescreen.dart';
 import 'package:http/http.dart' as http;
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class User {
   final String email;
@@ -135,6 +131,7 @@ class _AuthScreenState extends State<AuthScreen> {
             ]),
           ));
     }
+
     Widget _button(void func()) {
       return RaisedButton(
         splashColor: Colors.white,
@@ -240,6 +237,7 @@ class _AuthScreenState extends State<AuthScreen> {
       ),
       child: Scaffold(
         appBar: AppBar(
+                automaticallyImplyLeading: false,
           backgroundColor: Colors.transparent,
           actions: [
             IconButton(
@@ -266,7 +264,7 @@ class _AuthScreenState extends State<AuthScreen> {
               'login',
             ),
             Padding(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(5),
               child: GestureDetector(
                 child: Text(
                   "not-reg-btn".tr().toString(),
