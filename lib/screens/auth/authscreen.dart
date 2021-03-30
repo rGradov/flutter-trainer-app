@@ -42,8 +42,6 @@ List countryCode = ["US", "RU"];
 
 class _AuthScreenState extends State<AuthScreen> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
-  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
-  bool _isLoggedIn = false;
   TextEditingController _emailController = TextEditingController();
   TextEditingController _pswdController = TextEditingController();
 
@@ -51,37 +49,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
   static String userEmail = 'trainer@gmail.com';
   static String userPswd = 'trainer';
-
-  _login() async {
-    print('try login');
-    try {
-      await _googleSignIn.signIn().then((value) => {
-            if (_isLoggedIn = true)
-              {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
-                )
-              }
-          });
-      setState(() {
-        _isLoggedIn = true;
-      });
-      print(_googleSignIn.currentUser.email);
-
-      print('login');
-    } catch (err) {
-      print('errors:');
-      print(err);
-    }
-  }
-
-  _logout() {
-    _googleSignIn.signOut();
-    setState(() {
-      _isLoggedIn = false;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,28 +135,6 @@ class _AuthScreenState extends State<AuthScreen> {
             ]),
           ));
     }
-
-    Widget _btnSigIn(void func()) {
-      return OutlineButton.icon(
-          splashColor: Colors.white,
-          highlightColor: Colors.white,
-          focusColor: Colors.greenAccent,
-          borderSide: BorderSide(
-            color: MainColor30,
-          ),
-          color: MainColor,
-          label: Text(
-            "btn-google-signIn".tr().toString(),
-            style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white),
-          ),
-          icon: FaIcon(FontAwesomeIcons.google, color: Colors.red),
-          onPressed: () {
-            _logout();
-            _login();
-          });
-    }
-
     Widget _button(void func()) {
       return RaisedButton(
         splashColor: Colors.white,
@@ -319,14 +264,6 @@ class _AuthScreenState extends State<AuthScreen> {
             _logo(),
             _form(
               'login',
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              child: Container(
-                height: 50,
-                width: MediaQuery.of(context).size.width,
-                child: _btnSigIn(() {}),
-              ),
             ),
             Padding(
               padding: EdgeInsets.all(10),
