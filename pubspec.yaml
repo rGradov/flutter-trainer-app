@@ -2,7 +2,6 @@ name: workout_app
 description: A new Flutter project.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-
 version: 1.0.0+1
 
 environment:
@@ -13,17 +12,16 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  intl: 
-  intl_translation: 
+  intl:
+  intl_translation:
   http: ^0.13.1
   form_field_validator: ^1.0.1
   font_awesome_flutter: ^8.10.0
   google_sign_in: ^5.0.0
-  easy_localization: 
-  localstorage: ^3.0.6 
+  easy_localization:
+  localstorage: ^3.0.6
   shared_preferences: ^0.5.8
   table_calendar: ^2.3.3
-
 
 dev_dependencies:
   flutter_test:

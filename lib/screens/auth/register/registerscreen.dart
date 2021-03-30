@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workout_app/const/const.dart';
 import 'package:workout_app/screens/home/homescreen.dart';
 import 'package:http/http.dart' as http;
@@ -12,19 +13,11 @@ class User {
   final String password;
   User({this.email, this.password});
 }
+
 Future<User> postData(String email, String password) async {
-  final resp = await http.post(
-    Uri.http(ApiLogin, 'typicode/demo/posts'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{
-      'email': email,
-      'password': password,
-    }),
-  );
-  if (resp.statusCode == 201) {
-  } else {}
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setString('email', email);
+  prefs.setString('pswd', password);
 }
 
 class RegScreen extends StatefulWidget {
@@ -36,9 +29,11 @@ class _RegScreenState extends State<RegScreen> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   final _user = User();
   var _trainer = false;
+
   TextEditingController _emailController = TextEditingController();
   TextEditingController _pswdController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Widget _logo() {

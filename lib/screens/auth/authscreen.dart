@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workout_app/const/const.dart';
 import 'package:workout_app/screens/auth/register/registerscreen.dart';
 import 'package:workout_app/screens/home/homescreen.dart';
@@ -14,18 +15,18 @@ class User {
 }
 
 Future<User> postData(String email, String password) async {
-  final resp = await http.post(
-    Uri.http(ApiLogin, 'typicode/demo/posts'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{
-      'email': email,
-      'password': password,
-    }),
-  );
-  if (resp.statusCode == 201) {
-  } else {}
+  // final resp = await http.post(
+  //   Uri.http(ApiLogin, 'typicode/demo/posts'),
+  //   headers: <String, String>{
+  //     'Content-Type': 'application/json; charset=UTF-8',
+  //   },
+  //   body: jsonEncode(<String, String>{
+  //     'email': email,
+  //     'password': password,
+  //   }),
+  // );
+  // if (resp.statusCode == 201) {
+  // } else {}
 }
 
 class AuthScreen extends StatefulWidget {
@@ -143,13 +144,16 @@ class _AuthScreenState extends State<AuthScreen> {
               fontSize: 16,
               color: Colors.black,
             )),
-        onPressed: () {
+        onPressed: () async {
           if (formkey.currentState.validate()) {
             postData(_emailController.text, _pswdController.text);
-            if (_emailController.text == userEmail) {
+            final prefs = await SharedPreferences.getInstance();
+            final e = prefs.getString('email') ?? 0;
+            final p = prefs.getString('pswd') ?? 0;
+            if (_emailController.text == e) {
               print('correct email');
 
-              if (_pswdController.text == userPswd) {
+              if (_pswdController.text == p) {
                 print('work');
                 formkey.currentState.reset();
                 Navigator.push(
@@ -237,7 +241,7 @@ class _AuthScreenState extends State<AuthScreen> {
       ),
       child: Scaffold(
         appBar: AppBar(
-                automaticallyImplyLeading: false,
+          automaticallyImplyLeading: false,
           backgroundColor: Colors.transparent,
           actions: [
             IconButton(
