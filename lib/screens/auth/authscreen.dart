@@ -107,7 +107,7 @@ class _AuthScreenState extends State<AuthScreen> {
         padding: EdgeInsets.only(left: 20, right: 20),
         child: TextFormField(
             controller: _pswdController,
-            obscureText: false,
+            obscureText: true,
             style: TextStyle(fontSize: 20, color: Colors.white),
             decoration: InputDecoration(
                 hintStyle: TextStyle(

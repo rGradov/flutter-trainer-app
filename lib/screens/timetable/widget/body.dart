@@ -87,7 +87,7 @@ class _BodyTimeTableState extends State<BodyTimeTable> {
               SizedBox(height: 20),
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.55,
+                height: MediaQuery.of(context).size.height,
                 padding: EdgeInsets.only(left: 30),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
