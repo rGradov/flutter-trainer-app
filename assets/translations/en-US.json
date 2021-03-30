@@ -18,7 +18,9 @@
   "payment": "payment",
   "timetable": "timetable",
   "Statistics": "Statistics",
+  "workouts":"workouts",
   "valid-email": "Input correct email",
   "valid-pswd": "Input coorect password",
-  "btn-change-lang": "Set locale to"
+  "btn-change-lang": "Set locale to",
+  "today":"today"
 }

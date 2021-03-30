@@ -33,7 +33,7 @@ class _BodyTimeTableState extends State<BodyTimeTable> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -107,7 +107,7 @@ class _BodyTimeTableState extends State<BodyTimeTable> {
                         Padding(
                           padding: EdgeInsets.only(top: 50),
                           child: Text(
-                            'Today', //fix this
+                            'today'.tr().toString(),
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 30,

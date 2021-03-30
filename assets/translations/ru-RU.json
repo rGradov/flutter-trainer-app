@@ -17,8 +17,10 @@
   "trainer": "тренер",
   "payment": "оплата",
   "timetable": "рассписание",
-  "Statistics": "Статистика",
+  "workouts": "тренировки",
+  "statistics": "Статистика",
   "valid-email": "введите корректную почту",
   "valid-pswd": "Введите корректный пароль ",
-  "btn-change-lang": "Изменить язык на"
+  "btn-change-lang": "Изменить язык на",
+  "today": "сегодня"
 }

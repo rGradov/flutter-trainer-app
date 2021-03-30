@@ -11,11 +11,6 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage('assets/background.jpg'), fit: BoxFit.cover),
-      ),
       child: MainText(),
     );
   }
@@ -32,13 +27,13 @@ class MainText extends StatelessWidget {
       child: Column(
         children: [
           new Expanded(
-            child: HeaderTxt(),
+            child: Column(),
             flex: 1,
           ),
           new Expanded(
             child: Column(
                 //mainAxisAlignment:MainAxisAlignment.,
-
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [Navigations()]),
             flex: 2,
           )
@@ -57,17 +52,17 @@ class HeaderTxt extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          "trainer".tr().toString(),
-          // text
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: MainColor,
-            fontSize: 40,
-            fontWeight: FontWeight.w400,
-            decoration: TextDecoration.underline,
-          ),
-        ),
+        // Text(
+        //   "trainer".tr().toString(),
+        //   // text
+        //   textAlign: TextAlign.center,
+        //   style: TextStyle(
+        //     color: MainColor,
+        //     fontSize: 40,
+        //     fontWeight: FontWeight.w400,
+        //     decoration: TextDecoration.underline,
+        //   ),
+        // ),
       ],
     );
   }
@@ -82,23 +77,44 @@ class Navigations extends StatelessWidget {
   Widget build(BuildContext context) {
     var textStyle = TextStyle(
       color: Colors.white,
-      fontSize: 25,
+      fontSize: 35,
       fontWeight: FontWeight.w400,
       decoration: TextDecoration.underline,
     );
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Text(
-          "payment".tr().toString(),
-          style: textStyle,
-        ),
-        Padding(
-          padding: EdgeInsets.all(10),
-          child: GestureDetector(
-                child: Text(
-                  "timetable".tr().toString(),
-                  style:textStyle),
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      // color: Colors.red,
+      alignment: Alignment.topLeft,
+      child: Column(
+        children: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                      padding: const EdgeInsets.only(left: 10,),
+                alignment: FractionalOffset.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: GestureDetector(
+                    child: Text(
+                      "payment".tr().toString(),
+                      textAlign: TextAlign.left,
+                      style: textStyle,
+                    ),
+                    onTap: () {},
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Container(
+                            padding: const EdgeInsets.only(left: 10,),
+            alignment: FractionalOffset.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.only( bottom: 10),
+              child: GestureDetector(
+                child: Text("timetable".tr().toString(),
+                    textAlign: TextAlign.left, style: textStyle),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -106,9 +122,44 @@ class Navigations extends StatelessWidget {
                   );
                 },
               ),
-      
-        ),
-      ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(left: 10,),
+            alignment: FractionalOffset.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.only( bottom: 10),
+              child: GestureDetector(
+                child: Text("workouts".tr().toString(),
+                    textAlign: TextAlign.left, style: textStyle),
+                onTap: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => TimetableScreen()),
+                  // );
+                },
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(left: 10,),
+            alignment: FractionalOffset.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.only( bottom: 10),
+              child: GestureDetector(
+                child: Text("statistics".tr().toString(),
+                    textAlign: TextAlign.left, style: textStyle),
+                onTap: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => TimetableScreen()),
+                  // );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
