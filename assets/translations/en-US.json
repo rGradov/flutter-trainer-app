@@ -10,7 +10,9 @@
   "pswd-error-max-length": "Password should not be greater than 15 characters",
   "hint-pswd": "Password",
   "hint-email": "Email",
-  "hint-name": "name",
+  "hint-name": "email",
+  "hint-lname": "last name",
+  "hint-fname": "first name",
   "main-title": "FIT",
   "not-reg-btn": "not registered yet? Register",
   "not-login-btn": "already have account? login",
@@ -18,9 +20,9 @@
   "payment": "payment",
   "timetable": "timetable",
   "Statistics": "Statistics",
-  "workouts":"workouts",
+  "workouts": "workouts",
   "valid-email": "Input correct email",
   "valid-pswd": "Input coorect password",
   "btn-change-lang": "Set locale to",
-  "today":"today"
+  "today": "today"
 }

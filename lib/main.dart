@@ -1,7 +1,9 @@
+import 'package:workout_app/route/routerName.dart';
 import 'package:workout_app/screens/auth/authscreen.dart';
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart'; // import custom loaders
 import 'package:flutter/material.dart';
+import 'route/route.dart' as router;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +24,9 @@ class FitApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      home: AuthScreen(),
+      // home: AuthScreen(),
+      onGenerateRoute: router.generateRoute,
+      initialRoute: LoginRoute,
     );
   }
 }

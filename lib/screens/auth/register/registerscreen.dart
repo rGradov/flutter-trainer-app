@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workout_app/const/const.dart';
+import 'package:workout_app/route/routerName.dart';
 import 'package:workout_app/screens/home/homescreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:workout_app/screens/auth/authscreen.dart';
@@ -11,13 +12,37 @@ import 'package:workout_app/screens/auth/authscreen.dart';
 class User {
   final String email;
   final String password;
-  User({this.email, this.password});
+  final String lastName;
+  final String firstName;
+  final String login;
+  User({this.email, this.password, this.lastName, this.firstName, this.login});
 }
 
-Future<User> postData(String email, String password) async {
-  final prefs = await SharedPreferences.getInstance();
-  prefs.setString('email', email);
-  prefs.setString('pswd', password);
+Future<String> postData(String email, String password, String userName,
+    String firstName, String lastName) async {
+  // final prefs = await SharedPreferences.getInstance();
+  // prefs.setString('email', email);
+  // prefs.setString('pswd', password);
+  final resp = await http.post(
+    Uri.http(ApiUrl, 'api/register'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'email': email,
+      'username': userName,
+      'firstname': firstName,
+      'lastname': lastName,
+      'password': password,
+    }),
+  );
+  print('Response status: ${resp.statusCode}');
+  print('Response body: ${resp.body}');
+  if (resp.statusCode == 200) {
+    return 'true';
+  } else {
+    return resp.body;
+  }
 }
 
 class RegScreen extends StatefulWidget {
@@ -32,7 +57,9 @@ class _RegScreenState extends State<RegScreen> {
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _pswdController = TextEditingController();
-  TextEditingController _nameController = TextEditingController();
+  TextEditingController _userNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _firstNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -88,11 +115,83 @@ class _RegScreenState extends State<RegScreen> {
       );
     }
 
-    Widget _inputName() {
+    Widget _inputFirstName() {
       return Container(
         padding: EdgeInsets.only(left: 20, right: 20),
         child: TextFormField(
-          controller: _nameController,
+          controller: _firstNameController,
+          obscureText: false,
+          style: TextStyle(fontSize: 20, color: Colors.white),
+          decoration: InputDecoration(
+              hintStyle: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white30),
+              hintText: "hint-fname".tr().toString(),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MainColor, width: 3),
+              ),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: MainColor30, width: 1)),
+              prefixIcon: Padding(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: IconTheme(
+                  data: IconThemeData(color: Colors.white),
+                  child: Icon(Icons.account_circle),
+                ),
+              )),
+          validator: MultiValidator([
+            RequiredValidator(errorText: "erorr-req".tr().toString()),
+            MinLengthValidator(2,
+                errorText: "error-name-min-length".tr().toString()),
+            MaxLengthValidator(15,
+                errorText: "error-name-max-length".tr().toString())
+          ]),
+        ),
+      );
+    }
+
+    Widget _inputLastName() {
+      return Container(
+        padding: EdgeInsets.only(left: 20, right: 20),
+        child: TextFormField(
+          controller: _lastNameController,
+          obscureText: false,
+          style: TextStyle(fontSize: 20, color: Colors.white),
+          decoration: InputDecoration(
+              hintStyle: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white30),
+              hintText: "hint-lname".tr().toString(),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MainColor, width: 3),
+              ),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: MainColor30, width: 1)),
+              prefixIcon: Padding(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: IconTheme(
+                  data: IconThemeData(color: Colors.white),
+                  child: Icon(Icons.account_circle),
+                ),
+              )),
+          validator: MultiValidator([
+            RequiredValidator(errorText: "erorr-req".tr().toString()),
+            MinLengthValidator(2,
+                errorText: "error-name-min-length".tr().toString()),
+            MaxLengthValidator(15,
+                errorText: "error-name-max-length".tr().toString())
+          ]),
+        ),
+      );
+    }
+
+    Widget _inputUserName() {
+      return Container(
+        padding: EdgeInsets.only(left: 20, right: 20),
+        child: TextFormField(
+          controller: _userNameController,
           obscureText: false,
           style: TextStyle(fontSize: 20, color: Colors.white),
           decoration: InputDecoration(
@@ -175,6 +274,15 @@ class _RegScreenState extends State<RegScreen> {
       );
     }
 
+    void _clearForm() {
+      formkey.currentState.reset();
+      _pswdController.clear();
+      _emailController.clear();
+      _firstNameController.clear();
+      _lastNameController.clear();
+      _userNameController.clear();
+    }
+
     Widget _button(void func()) {
       return RaisedButton(
         splashColor: Colors.white,
@@ -186,16 +294,32 @@ class _RegScreenState extends State<RegScreen> {
               fontSize: 16,
               color: Colors.black,
             )),
-        onPressed: () {
+        onPressed: () async {
           if (formkey.currentState.validate()) {
-            postData(_emailController.text, _pswdController.text);
+            final body = await postData(
+                _emailController.text,
+                _pswdController.text,
+                _userNameController.text,
+                _firstNameController.text,
+                _lastNameController.text);
+            print(body);
+            if (body == 'true') {
+              _clearForm();
+              Navigator.pushNamedAndRemoveUntil(
+                  context, HomeRoute, (r) => false);
+            } else {
+              final snackBar = SnackBar(
+                content: Text(body.toString()),
+                action: SnackBarAction(
+                  label: 'ok',
+                  onPressed: _clearForm,
+                ),
+              );
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomeScreen()),
-            );
-
-            formkey.currentState.reset();
+              // Find the ScaffoldMessenger in the widget tree
+              // and use it to show a SnackBar.
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
           }
         },
       );
@@ -209,7 +333,13 @@ class _RegScreenState extends State<RegScreen> {
           children: <Widget>[
             Padding(
                 padding: EdgeInsets.only(bottom: 20, top: 10),
-                child: _inputName()),
+                child: _inputUserName()),
+            Padding(
+                padding: EdgeInsets.only(bottom: 20, top: 10),
+                child: _inputFirstName()),
+            Padding(
+                padding: EdgeInsets.only(bottom: 20, top: 10),
+                child: _inputLastName()),
             Padding(
                 padding: EdgeInsets.only(bottom: 20, top: 10),
                 child: _inputEmail()),

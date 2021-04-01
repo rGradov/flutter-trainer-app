@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workout_app/const/const.dart';
+import 'package:workout_app/route/routerName.dart';
 import 'package:workout_app/screens/auth/register/registerscreen.dart';
 import 'package:workout_app/screens/home/homescreen.dart';
 import 'package:http/http.dart' as http;
@@ -14,19 +15,24 @@ class User {
   User({this.email, this.password});
 }
 
-Future<User> postData(String email, String password) async {
-  // final resp = await http.post(
-  //   Uri.http(ApiLogin, 'typicode/demo/posts'),
-  //   headers: <String, String>{
-  //     'Content-Type': 'application/json; charset=UTF-8',
-  //   },
-  //   body: jsonEncode(<String, String>{
-  //     'email': email,
-  //     'password': password,
-  //   }),
-  // );
-  // if (resp.statusCode == 201) {
-  // } else {}
+Future<String> postData(String email, String password) async {
+  final resp = await http.post(
+    Uri.http(ApiLogin, 'typicode/demo/posts'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'email': email,
+      'password': password,
+    }),
+  );
+  print(resp.statusCode);
+  print(resp.body);
+  if (resp.statusCode == 201) {
+    return 'true';
+  } else {
+    return resp.body;
+  }
 }
 
 class AuthScreen extends StatefulWidget {
@@ -135,39 +141,33 @@ class _AuthScreenState extends State<AuthScreen> {
 
     Widget _button(void func()) {
       return RaisedButton(
-        splashColor: Colors.white,
-        highlightColor: Colors.white,
-        color: MainColor,
-        child: Text("${"login-btn-text".tr().toString()}",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Colors.black,
-            )),
-        onPressed: () async {
-          if (formkey.currentState.validate()) {
-            postData(_emailController.text, _pswdController.text);
-            final prefs = await SharedPreferences.getInstance();
-            final e = prefs.getString('email') ?? 0;
-            final p = prefs.getString('pswd') ?? 0;
-            if (_emailController.text == e) {
-              print('correct email');
-
-              if (_pswdController.text == p) {
-                print('work');
-                formkey.currentState.reset();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
-                );
+          splashColor: Colors.white,
+          highlightColor: Colors.white,
+          color: MainColor,
+          child: Text("${"login-btn-text".tr().toString()}",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Colors.black,
+              )),
+          onPressed: () async {
+            if (formkey.currentState.validate()) {
+              final body = await postData(
+                _emailController.text,
+                _pswdController.text,
+              );
+              print(body);
+              if (body == 'true') {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, HomeRoute, (r) => false);
               } else {
                 final snackBar = SnackBar(
-                  content: Text("valid-pswd".tr().toString()),
+                  content: Text(body.toString()),
                   action: SnackBarAction(
                     label: 'ok',
                     onPressed: () {
                       // formkey.currentState.reset();
-                      _pswdController.clear();
+                      // _pswdController.clear();
                     },
                   ),
                 );
@@ -176,26 +176,8 @@ class _AuthScreenState extends State<AuthScreen> {
                 // and use it to show a SnackBar.
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
-            } else {
-              final snackBar = SnackBar(
-                content: Text("valid-email".tr().toString()),
-                action: SnackBarAction(
-                  label: 'ok',
-                  onPressed: () {
-                    _pswdController.clear();
-                    _emailController.clear();
-                    formkey.currentState.reset();
-                  },
-                ),
-              );
-
-              // Find the ScaffoldMessenger in the widget tree
-              // and use it to show a SnackBar.
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
             }
-          }
-        },
-      );
+          });
     }
 
     Widget _form(String lable) {
