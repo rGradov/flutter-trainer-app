@@ -32,7 +32,7 @@ Future<String> postData(String email, String password) async {
     jsonResponse = json.decode(resp.body);
     // print(jsonResponse['token']);
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString("token", jsonResponse.['token']);
+    sharedPreferences.setString("token", jsonResponse['token']);
     print(sharedPreferences.getString("token"));
     return 'true';
   } else {

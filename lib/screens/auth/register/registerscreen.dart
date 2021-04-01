@@ -5,7 +5,6 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workout_app/const/const.dart';
 import 'package:workout_app/route/routerName.dart';
-import 'package:workout_app/screens/home/homescreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:workout_app/screens/auth/authscreen.dart';
 
@@ -38,12 +37,12 @@ Future<String> postData(String email, String password, String userName,
   );
   print('Response status: ${resp.statusCode}');
   print('Response body: ${resp.body}');
-    var jsonResponse = null;
+  var jsonResponse = null;
   if (resp.statusCode == 200) {
-      jsonResponse = json.decode(resp.body);
+    jsonResponse = json.decode(resp.body);
     // print(jsonResponse['token']);
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString("token", jsonResponse.['token']);
+    sharedPreferences.setString("token", jsonResponse['token']);
     print(sharedPreferences.getString("token"));
     return 'true';
   } else {
@@ -419,13 +418,15 @@ class _RegScreenState extends State<RegScreen> {
           ],
         ),
         backgroundColor: Colors.transparent,
-        body: Column(
-          children: <Widget>[
-            _logo(),
-            _form(
-              'register',
-            ),
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              _logo(),
+              _form(
+                'register',
+              ),
+            ],
+          ),
         ),
       ),
     );
