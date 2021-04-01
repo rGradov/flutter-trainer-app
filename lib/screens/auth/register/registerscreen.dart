@@ -38,7 +38,13 @@ Future<String> postData(String email, String password, String userName,
   );
   print('Response status: ${resp.statusCode}');
   print('Response body: ${resp.body}');
+    var jsonResponse = null;
   if (resp.statusCode == 200) {
+      jsonResponse = json.decode(resp.body);
+    // print(jsonResponse['token']);
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString("token", jsonResponse.['token']);
+    print(sharedPreferences.getString("token"));
     return 'true';
   } else {
     return resp.body;

@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workout_app/const/const.dart';
 import 'package:workout_app/route/routerName.dart';
 import 'package:workout_app/screens/auth/register/registerscreen.dart';
-import 'package:workout_app/screens/home/homescreen.dart';
 import 'package:http/http.dart' as http;
 
 class User {
@@ -17,7 +16,7 @@ class User {
 
 Future<String> postData(String email, String password) async {
   final resp = await http.post(
-    Uri.http(ApiLogin, 'typicode/demo/posts'),
+    Uri.http(ApiUrl, 'api/login'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -27,8 +26,14 @@ Future<String> postData(String email, String password) async {
     }),
   );
   print(resp.statusCode);
-  print(resp.body);
-  if (resp.statusCode == 201) {
+  // print(resp.body);
+  var jsonResponse = null;
+  if (resp.statusCode == 200) {
+    jsonResponse = json.decode(resp.body);
+    // print(jsonResponse['token']);
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString("token", jsonResponse.['token']);
+    print(sharedPreferences.getString("token"));
     return 'true';
   } else {
     return resp.body;
