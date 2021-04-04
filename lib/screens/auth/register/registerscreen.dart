@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workout_app/const/const.dart';
@@ -33,7 +34,7 @@ Future<String> postData(String email, String password, String userName,
       'firstname': firstName,
       'lastname': lastName,
       'password': password,
-      'trainer':trainer.toString(),
+      'trainer': trainer.toString(),
     }),
   );
   print('Response status: ${resp.statusCode}');
@@ -59,7 +60,7 @@ class RegScreen extends StatefulWidget {
 class _RegScreenState extends State<RegScreen> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   final _user = User();
-   bool _trainer = false;
+  bool _trainer = false;
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _pswdController = TextEditingController();
@@ -289,6 +290,55 @@ class _RegScreenState extends State<RegScreen> {
       _userNameController.clear();
     }
 
+    Widget _ProgressButton() {
+      return ProgressButton(
+          defaultWidget: Text("reg-btn-text".tr().toString(),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Colors.black,
+              )),
+          color: MainColor,
+          progressWidget: const CircularProgressIndicator(
+            backgroundColor: Colors.black,
+
+            // valueColor: ,
+          ),
+          animate: true,
+          // type: ProgressButtonType.Flat,
+          onPressed: () async {
+            if (formkey.currentState.validate()) {
+              final body = await postData(
+                  _emailController.text,
+                  _pswdController.text,
+                  _userNameController.text,
+                  _firstNameController.text,
+                  _lastNameController.text,
+                  _trainer);
+              print(body);
+              if (body == 'true') {
+                _clearForm();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, HomeRoute, (r) => false);
+              } else {
+                final snackBar = SnackBar(
+                  content: Text(body.toString()),
+                  action: SnackBarAction(
+                    label: 'ok',
+                    onPressed: _clearForm,
+                    // formkey.currentState.reset();
+                    // _pswdController.clear();
+                  ),
+                );
+
+                // Find the ScaffoldMessenger in the widget tree
+                // and use it to show a SnackBar.
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+            }
+          });
+    }
+
     Widget _button(void func()) {
       return RaisedButton(
         splashColor: Colors.white,
@@ -363,8 +413,8 @@ class _RegScreenState extends State<RegScreen> {
               padding: EdgeInsets.only(left: 20, right: 20),
               child: Container(
                 height: 50,
-                width: MediaQuery.of(context).size.width,
-                child: _button(() {}),
+                // width: MediaQuery.of(context).size.width,
+                child: _ProgressButton(),
               ),
             ),
             SizedBox(

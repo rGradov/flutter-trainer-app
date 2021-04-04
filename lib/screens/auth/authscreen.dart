@@ -7,6 +7,7 @@ import 'package:workout_app/const/const.dart';
 import 'package:workout_app/route/routerName.dart';
 import 'package:workout_app/screens/auth/register/registerscreen.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_progress_button/flutter_progress_button.dart';
 
 class User {
   final String email;
@@ -52,6 +53,7 @@ class _AuthScreenState extends State<AuthScreen> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _pswdController = TextEditingController();
+  bool isLoading = true;
 
   var userTrainer = new User();
 
@@ -144,17 +146,24 @@ class _AuthScreenState extends State<AuthScreen> {
           ));
     }
 
-    Widget _button(void func()) {
-      return RaisedButton(
-          splashColor: Colors.white,
-          highlightColor: Colors.white,
+    Widget _ProgressButton() {
+      return ProgressButton(
+          defaultWidget: Text(
+            "${"login-btn-text".tr().toString()}",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.black,
+            ),
+          ),
           color: MainColor,
-          child: Text("${"login-btn-text".tr().toString()}",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: Colors.black,
-              )),
+          progressWidget: const CircularProgressIndicator(
+            backgroundColor: Colors.black,
+
+            // valueColor: ,
+          ),
+          animate: true,
+          // type: ProgressButtonType.Flat,
           onPressed: () async {
             if (formkey.currentState.validate()) {
               final body = await postData(
@@ -196,19 +205,19 @@ class _AuthScreenState extends State<AuthScreen> {
                 child: _inputEmail()),
             Padding(
               padding: EdgeInsets.only(
-                bottom: 20,
+                bottom: 15,
               ),
               child: _inputPswd(),
             ),
             SizedBox(
-              height: 20,
+              height: 15,
             ),
             Padding(
               padding: EdgeInsets.only(left: 20, right: 20),
               child: Container(
                 height: 50,
-                width: MediaQuery.of(context).size.width,
-                child: _button(() {}),
+                // width: MediaQuery.of(context).size.width,
+                child: _ProgressButton(),
               ),
             ),
             SizedBox(
