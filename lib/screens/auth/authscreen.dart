@@ -263,6 +263,8 @@ class _AuthScreenState extends State<AuthScreen> {
                       color: Colors.white, fontWeight: FontWeight.bold),
                 ),
                 onTap: () {
+                  _emailController.clear();
+                  _pswdController.clear();
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => RegScreen()),
