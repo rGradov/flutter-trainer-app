@@ -18,7 +18,7 @@ class User {
 }
 
 Future<String> postData(String email, String password, String userName,
-    String firstName, String lastName) async {
+    String firstName, String lastName, bool trainer) async {
   // final prefs = await SharedPreferences.getInstance();
   // prefs.setString('email', email);
   // prefs.setString('pswd', password);
@@ -33,6 +33,7 @@ Future<String> postData(String email, String password, String userName,
       'firstname': firstName,
       'lastname': lastName,
       'password': password,
+      'trainer':trainer.toString(),
     }),
   );
   print('Response status: ${resp.statusCode}');
@@ -58,7 +59,7 @@ class RegScreen extends StatefulWidget {
 class _RegScreenState extends State<RegScreen> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   final _user = User();
-  var _trainer = false;
+   bool _trainer = false;
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _pswdController = TextEditingController();
@@ -306,7 +307,8 @@ class _RegScreenState extends State<RegScreen> {
                 _pswdController.text,
                 _userNameController.text,
                 _firstNameController.text,
-                _lastNameController.text);
+                _lastNameController.text,
+                _trainer);
             print(body);
             if (body == 'true') {
               _clearForm();
