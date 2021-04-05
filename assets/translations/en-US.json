@@ -24,5 +24,6 @@
   "valid-email": "Input correct email",
   "valid-pswd": "Input coorect password",
   "btn-change-lang": "Set locale to",
-  "today": "today"
+  "today": "today",
+  "pswd-reset":"Reset Password"
 }

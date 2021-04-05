@@ -17,12 +17,14 @@ dependencies:
   http: ^0.13.1
   form_field_validator: ^1.0.1
   font_awesome_flutter: ^8.10.0
-  google_sign_in: ^5.0.0
   easy_localization:
   localstorage: ^3.0.6
   shared_preferences: ^0.5.8
   table_calendar: ^2.3.3
   flutter_progress_button: '^1.0.0'
+  form_bloc: ^0.5.2
+  flutter_form_bloc: ^0.4.3
+  page_transition: ^1.1.7
 
 dev_dependencies:
   flutter_test:

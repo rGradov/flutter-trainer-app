@@ -429,9 +429,9 @@ class _RegScreenState extends State<RegScreen> {
                       color: Colors.white, fontWeight: FontWeight.bold),
                 ),
                 onTap: () {
-                  Navigator.push(
+                  Navigator.pushNamed(
                     context,
-                    MaterialPageRoute(builder: (context) => AuthScreen()),
+                   LoginRoute,
                   );
                 },
               ),

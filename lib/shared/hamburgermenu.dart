@@ -40,8 +40,8 @@ class HamburgerMenu extends StatefulWidget {
 }
 
 class _HamburgerMenuState extends State<HamburgerMenu> {
-  String firstName;
-  String lastName;
+  String firstName = '';
+  String lastName = '';
 
   @override
   void initState() {

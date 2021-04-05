@@ -11,18 +11,19 @@
   "hint-pswd": "Пароль",
   "hint-email": "Почта",
   "hint-name": "Логин",
-  "hint-lname":"Фамилия",
-  "hint-fname":"Имя",
+  "hint-lname": "Фамилия",
+  "hint-fname": "Имя",
   "main-title": "ФИТ",
   "not-reg-btn": "Зарегистрироваться",
   "not-login-btn": "Уже есть аккаунт? Войти",
   "trainer": "Тренер",
   "payment": "Оплата",
-  "timetable": "Рассписание",
+  "timetable": "Расписание",
   "workouts": "Тренировки",
   "statistics": "Статистика",
   "valid-email": "Введите корректную почту",
   "valid-pswd": "Введите корректный пароль ",
   "btn-change-lang": "Изменить язык на",
-  "today": "Сегодня"
+  "today": "Сегодня",
+  "pswd-reset": "Сбросить пароль"
 }

@@ -210,18 +210,7 @@ class _AuthScreenState extends State<AuthScreen> {
               child: _inputPswd(),
             ),
             SizedBox(
-              height: 15,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              child: Container(
-                height: 50,
-                // width: MediaQuery.of(context).size.width,
-                child: _ProgressButton(),
-              ),
-            ),
-            SizedBox(
-              height: 20,
+              height: 5,
             ),
           ],
         ),
@@ -264,21 +253,49 @@ class _AuthScreenState extends State<AuthScreen> {
               'login',
             ),
             Padding(
-              padding: EdgeInsets.all(5),
-              child: GestureDetector(
-                child: Text(
-                  "not-reg-btn".tr().toString(),
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-                onTap: () {
-                  _emailController.clear();
-                  _pswdController.clear();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => RegScreen()),
-                  );
-                },
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: Container(
+                height: 50,
+                // width: MediaQuery.of(context).size.width,
+                child: _ProgressButton(),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10, left: 20, right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  GestureDetector(
+                    child: Text(
+                      "not-reg-btn".tr().toString(),
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    onTap: () {
+                      _emailController.clear();
+                      _pswdController.clear();
+                      Navigator.pushNamed(
+                        context,
+                        RegisterRoute,
+                      );
+                    },
+                  ),
+                  GestureDetector(
+                    child: Text(
+                      "pswd-reset".tr().toString(),
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    onTap: () {
+                      _emailController.clear();
+                      _pswdController.clear();
+                      Navigator.pushNamed(
+                        context,
+                        ResetPswdRoute,
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
           ],
