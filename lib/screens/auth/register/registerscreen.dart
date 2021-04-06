@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workout_app/const/const.dart';
 import 'package:workout_app/route/routerName.dart';
@@ -20,9 +21,9 @@ class User {
 
 Future<String> postData(String email, String password, String userName,
     String firstName, String lastName, bool trainer) async {
-  // final prefs = await SharedPreferences.getInstance();
-  // prefs.setString('email', email);
-  // prefs.setString('pswd', password);
+  var status = await OneSignal.shared.getPermissionSubscriptionState();
+  var userId = status.subscriptionStatus.userId;
+  print(userId);
   final resp = await http.post(
     Uri.http(ApiUrl, 'api/register'),
     headers: <String, String>{
@@ -35,6 +36,7 @@ Future<String> postData(String email, String password, String userName,
       'lastname': lastName,
       'password': password,
       'trainer': trainer.toString(),
+      'userId': userId,
     }),
   );
   print('Response status: ${resp.statusCode}');
@@ -323,9 +325,9 @@ class _RegScreenState extends State<RegScreen> {
           onPressed: () async {
             if (formkey.currentState.validate()) {
               if (status == true) {
-                  setState(() {
-                status = !status;
-              });
+                setState(() {
+                  status = !status;
+                });
                 final body = await postData(
                     _emailController.text,
                     _pswdController.text,
@@ -335,16 +337,16 @@ class _RegScreenState extends State<RegScreen> {
                     _trainer);
                 print(body);
                 if (body == 'true') {
-                    setState(() {
-                status = !status;
-              });
+                  setState(() {
+                    status = !status;
+                  });
                   _clearForm();
                   Navigator.pushNamedAndRemoveUntil(
                       context, HomeRoute, (r) => false);
                 } else {
-                    setState(() {
-                status = !status;
-              });
+                  setState(() {
+                    status = !status;
+                  });
                   final snackBar = SnackBar(
                     content: Text(body.toString().tr().toString()),
                     action: SnackBarAction(

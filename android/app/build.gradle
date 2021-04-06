@@ -1,3 +1,16 @@
+buildscript {
+    repositories {
+        // ...
+        maven { url 'https://plugins.gradle.org/m2/' } // Gradle Plugin Portal
+    }
+    dependencies {
+        // ...
+        // OneSignal-Gradle-Plugin
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.6, 0.99.99]'
+    }
+}
+
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -40,6 +53,11 @@ android {
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+         manifestPlaceholders = [
+          onesignal_app_id: '70190b13-85aa-4308-bec0-eb3f8b6f1f78',
+          // Project number pulled from dashboard, local value is ignored.
+          onesignal_google_project_number: 'REMOTE'
+      ]
     }
 
     buildTypes {

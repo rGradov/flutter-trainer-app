@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workout_app/const/const.dart';
 import 'package:workout_app/route/routerName.dart';
@@ -17,6 +18,9 @@ class User {
 }
 
 Future<String> postData(String email, String password) async {
+  var status = await OneSignal.shared.getPermissionSubscriptionState();
+  var userId = status.subscriptionStatus.userId;
+  print(userId);
   final resp = await http.post(
     Uri.http(ApiUrl, 'api/login'),
     headers: <String, String>{
@@ -25,6 +29,7 @@ Future<String> postData(String email, String password) async {
     body: jsonEncode(<String, String>{
       'email': email,
       'password': password,
+      'userId':userId,
     }),
   );
   print(resp.statusCode);

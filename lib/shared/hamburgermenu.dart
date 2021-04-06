@@ -26,7 +26,6 @@ Future postData() async {
   jsonResponse = json.decode(resp.body);
   print(jsonResponse);
   return jsonResponse;
-
 }
 
 class HamburgerMenu extends StatefulWidget {
@@ -38,6 +37,7 @@ class _HamburgerMenuState extends State<HamburgerMenu> {
   String firstName = '';
   String lastName = '';
   bool _trainer = false;
+  var myCustomUniqueUserId = "something from my backend server";
 
   @override
   void initState() {

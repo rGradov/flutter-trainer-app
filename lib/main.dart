@@ -3,11 +3,18 @@ import 'package:workout_app/route/routerName.dart';
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart'; // import custom loaders
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import 'route/route.dart' as router;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  OneSignal.shared.init("70190b13-85aa-4308-bec0-eb3f8b6f1f78", iOSSettings: {
+    OSiOSSettings.autoPrompt: false,
+    OSiOSSettings.inAppLaunchUrl: false
+  });
+  OneSignal.shared
+      .setInFocusDisplayType(OSNotificationDisplayType.notification);
   String defRoute;
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   final token = await sharedPreferences.getString("token");
@@ -25,9 +32,27 @@ void main() async {
   ));
 }
 
-class FitApp extends StatelessWidget {
+class FitApp extends StatefulWidget {
   FitApp(this.defRoute);
   final String defRoute;
+
+  @override
+  _FitAppState createState() => _FitAppState();
+}
+
+class _FitAppState extends State<FitApp> {
+  @override
+  void initState() {
+    super.initState();
+    OneSignal.shared.setNotificationReceivedHandler((OSNotification notification) {
+    // will be called whenever a notification is received
+});
+
+OneSignal.shared.setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+  // will be called whenever a notification is opened/button pressed.
+});
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,7 +63,7 @@ class FitApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       onGenerateRoute: router.generateRoute,
-      initialRoute: defRoute,
+      initialRoute: widget.defRoute,
     );
   }
 }
