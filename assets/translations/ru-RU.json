@@ -1,4 +1,5 @@
 {
+  "Ok": "Ок",
   "reg-btn-text": "Регистрация",
   "login-btn-text": "Вход",
   "btn-google-signIn": "Войти с помощью Google",
@@ -16,6 +17,9 @@
   "main-title": "ФИТ",
   "not-reg-btn": "Зарегистрироваться",
   "not-login-btn": "Уже есть аккаунт? Войти",
+  "menu-logout": "Выйти",
+  "menu-profile": "Профиль",
+  "menu-invite": "Пригласить ",
   "trainer": "Тренер",
   "payment": "Оплата",
   "timetable": "Расписание",
@@ -25,5 +29,12 @@
   "valid-pswd": "Введите корректный пароль ",
   "btn-change-lang": "Изменить язык на",
   "today": "Сегодня",
-  "pswd-reset": "Сбросить пароль"
+  "pswd-reset": "Сбросить пароль",
+  "Invalid password": "Неверный пароль",
+  "Invalid email": "Неверная почта или такого пользователя не существует",
+  "Already sent": "приглашение уже отправленно",
+  "invite-btn": "Пригласить",
+  "Not acceptable username or email": "Логин или почта пользователя занята",
+  "history":"История",
+  "send-invite":"Приглашение"
 }

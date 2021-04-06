@@ -61,7 +61,8 @@ class _RegScreenState extends State<RegScreen> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   final _user = User();
   bool _trainer = false;
-
+  var status = true;
+  bool _obscureText = true;
   TextEditingController _emailController = TextEditingController();
   TextEditingController _pswdController = TextEditingController();
   TextEditingController _userNameController = TextEditingController();
@@ -92,26 +93,39 @@ class _RegScreenState extends State<RegScreen> {
         padding: EdgeInsets.only(left: 20, right: 20),
         child: TextFormField(
             controller: _pswdController,
-            obscureText: true,
+            obscureText: _obscureText,
             style: TextStyle(fontSize: 20, color: Colors.white),
             decoration: InputDecoration(
-                hintStyle: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white30),
-                hintText: "hint-pswd".tr().toString(),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: MainColor, width: 3),
+              hintStyle: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white30),
+              hintText: "hint-pswd".tr().toString(),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MainColor, width: 3),
+              ),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: MainColor30, width: 1)),
+              prefixIcon: Padding(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: IconTheme(
+                  data: IconThemeData(color: Colors.white),
+                  child: Icon(Icons.lock),
                 ),
-                enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: MainColor30, width: 1)),
-                prefixIcon: Padding(
+              ),
+              suffixIcon: Padding(
                   padding: EdgeInsets.only(left: 10, right: 10),
-                  child: IconTheme(
-                    data: IconThemeData(color: Colors.white),
-                    child: Icon(Icons.lock),
-                  ),
-                )),
+                  child: IconButton(
+                    icon: Icon(
+                        _obscureText ? Icons.visibility : Icons.visibility_off,
+                        color: Colors.white),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                  )),
+            ),
             validator: MultiValidator([
               RequiredValidator(errorText: "erorr-req".tr().toString()),
               MinLengthValidator(6,
@@ -308,78 +322,48 @@ class _RegScreenState extends State<RegScreen> {
           // type: ProgressButtonType.Flat,
           onPressed: () async {
             if (formkey.currentState.validate()) {
-              final body = await postData(
-                  _emailController.text,
-                  _pswdController.text,
-                  _userNameController.text,
-                  _firstNameController.text,
-                  _lastNameController.text,
-                  _trainer);
-              print(body);
-              if (body == 'true') {
-                _clearForm();
-                Navigator.pushNamedAndRemoveUntil(
-                    context, HomeRoute, (r) => false);
-              } else {
-                final snackBar = SnackBar(
-                  content: Text(body.toString()),
-                  action: SnackBarAction(
-                    label: 'ok',
-                    onPressed: _clearForm,
-                    // formkey.currentState.reset();
-                    // _pswdController.clear();
-                  ),
-                );
+              if (status == true) {
+                  setState(() {
+                status = !status;
+              });
+                final body = await postData(
+                    _emailController.text,
+                    _pswdController.text,
+                    _userNameController.text,
+                    _firstNameController.text,
+                    _lastNameController.text,
+                    _trainer);
+                print(body);
+                if (body == 'true') {
+                    setState(() {
+                status = !status;
+              });
+                  _clearForm();
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, HomeRoute, (r) => false);
+                } else {
+                    setState(() {
+                status = !status;
+              });
+                  final snackBar = SnackBar(
+                    content: Text(body.toString().tr().toString()),
+                    action: SnackBarAction(
+                      label: 'ok'.tr().toString(),
+                      onPressed: _clearForm,
+                      // formkey.currentState.reset();
+                      // _pswdController.clear();
+                    ),
+                  );
 
-                // Find the ScaffoldMessenger in the widget tree
-                // and use it to show a SnackBar.
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  // Find the ScaffoldMessenger in the widget tree
+                  // and use it to show a SnackBar.
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
+              } else {
+                print('press');
               }
             }
           });
-    }
-
-    Widget _button(void func()) {
-      return RaisedButton(
-        splashColor: Colors.white,
-        highlightColor: Colors.white,
-        color: MainColor,
-        child: Text("reg-btn-text".tr().toString(),
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Colors.black,
-            )),
-        onPressed: () async {
-          if (formkey.currentState.validate()) {
-            final body = await postData(
-                _emailController.text,
-                _pswdController.text,
-                _userNameController.text,
-                _firstNameController.text,
-                _lastNameController.text,
-                _trainer);
-            print(body);
-            if (body == 'true') {
-              _clearForm();
-              Navigator.pushNamedAndRemoveUntil(
-                  context, HomeRoute, (r) => false);
-            } else {
-              final snackBar = SnackBar(
-                content: Text(body.toString()),
-                action: SnackBarAction(
-                  label: 'ok',
-                  onPressed: _clearForm,
-                ),
-              );
-
-              // Find the ScaffoldMessenger in the widget tree
-              // and use it to show a SnackBar.
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            }
-          }
-        },
-      );
     }
 
     Widget _form(String lable) {
@@ -431,7 +415,7 @@ class _RegScreenState extends State<RegScreen> {
                 onTap: () {
                   Navigator.pushNamed(
                     context,
-                   LoginRoute,
+                    LoginRoute,
                   );
                 },
               ),

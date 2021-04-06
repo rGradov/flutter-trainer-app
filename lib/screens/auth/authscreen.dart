@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -54,6 +55,8 @@ class _AuthScreenState extends State<AuthScreen> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _pswdController = TextEditingController();
   bool isLoading = true;
+  var status = true;
+  bool _obscureText = true;
 
   var userTrainer = new User();
 
@@ -84,26 +87,39 @@ class _AuthScreenState extends State<AuthScreen> {
         padding: EdgeInsets.only(left: 20, right: 20),
         child: TextFormField(
             controller: _pswdController,
-            obscureText: true,
+            obscureText: _obscureText,
             style: TextStyle(fontSize: 20, color: Colors.white),
             decoration: InputDecoration(
-                hintStyle: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white30),
-                hintText: "hint-pswd".tr().toString(),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: MainColor, width: 3),
+              hintStyle: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white30),
+              hintText: "hint-pswd".tr().toString(),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MainColor, width: 3),
+              ),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: MainColor30, width: 1)),
+              prefixIcon: Padding(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: IconTheme(
+                  data: IconThemeData(color: Colors.white),
+                  child: Icon(Icons.lock),
                 ),
-                enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: MainColor30, width: 1)),
-                prefixIcon: Padding(
+              ),
+              suffixIcon: Padding(
                   padding: EdgeInsets.only(left: 10, right: 10),
-                  child: IconTheme(
-                    data: IconThemeData(color: Colors.white),
-                    child: Icon(Icons.lock),
-                  ),
-                )),
+                  child: IconButton(
+                    icon: Icon(
+                        _obscureText ? Icons.visibility : Icons.visibility_off,
+                        color: Colors.white),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                  )),
+            ),
             validator: MultiValidator([
               RequiredValidator(errorText: "erorr-req".tr().toString()),
               MinLengthValidator(6,
@@ -148,40 +164,59 @@ class _AuthScreenState extends State<AuthScreen> {
 
     Widget _ProgressButton() {
       return ProgressButton(
-          defaultWidget: Text(
-            "${"login-btn-text".tr().toString()}",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Colors.black,
-            ),
+        defaultWidget: Text(
+          "${"login-btn-text".tr().toString()}",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            color: Colors.black,
           ),
-          color: MainColor,
-          progressWidget: const CircularProgressIndicator(
-            backgroundColor: Colors.black,
+        ),
+        color: MainColor,
+        progressWidget: const CircularProgressIndicator(
+          backgroundColor: Colors.black,
 
-            // valueColor: ,
-          ),
-          animate: true,
-          // type: ProgressButtonType.Flat,
-          onPressed: () async {
+          // valueColor: ,
+        ),
+        animate: true,
+        // type: ProgressButtonType.Flat,
+        onPressed: () async {
+          if (status == true) {
             if (formkey.currentState.validate()) {
+              setState(() {
+                status = !status;
+              });
+              print('disable');
               final body = await postData(
                 _emailController.text,
                 _pswdController.text,
               );
               print(body);
               if (body == 'true') {
+                setState(() {
+                  status = !status;
+                });
                 Navigator.pushNamedAndRemoveUntil(
                     context, HomeRoute, (r) => false);
               } else {
+                setState(() {
+                  status = !status;
+                });
+                print(body.toString());
+
                 final snackBar = SnackBar(
-                  content: Text(body.toString()),
+                  content: Text(body.toString().tr().toString()),
                   action: SnackBarAction(
-                    label: 'ok',
+                    label: 'Ok'.tr().toString(),
                     onPressed: () {
                       // formkey.currentState.reset();
-                      // _pswdController.clear();
+
+                      if (body.toString() == 'Invalid password') {
+                        _pswdController.clear();
+                      } else {
+                        _emailController.clear();
+                        _pswdController.clear();
+                      }
                     },
                   ),
                 );
@@ -191,7 +226,11 @@ class _AuthScreenState extends State<AuthScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
             }
-          });
+          } else {
+            print('press');
+          }
+        },
+      );
     }
 
     Widget _form(String lable) {

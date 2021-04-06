@@ -1,4 +1,5 @@
 {
+  "Ok": "Ok",
   "reg-btn-text": "Register",
   "login-btn-text": "Login",
   "btn-google-signIn": "Sigup with google",
@@ -16,6 +17,9 @@
   "main-title": "FIT",
   "not-reg-btn": "Not registered yet? Register",
   "not-login-btn": "Already have account? login",
+  "menu-logout": "Logut",
+  "menu-profile": "Profile",
+  "menu-invite": "Invite persaon",
   "trainer": "Trainer",
   "payment": "Payment",
   "timetable": "Timetable",
@@ -25,5 +29,12 @@
   "valid-pswd": "Input coorect password",
   "btn-change-lang": "Set locale to",
   "today": "today",
-  "pswd-reset":"Reset Password"
+  "pswd-reset": "Reset Password",
+  "Invalid password": "Invalid password",
+  "Invalid email": "Invalid email",
+  "Not acceptable username or email": "Not acceptable username or email",
+  "Already sent": "Already sent",
+  "invite-btn": "Invite",
+  "history": "History",
+  "send-invite":"Send invite"
 }

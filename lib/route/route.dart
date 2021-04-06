@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:page_transition/page_transition.dart';
+import 'package:workout_app/reset-pswd/reset.dart';
 import 'package:workout_app/route/routerName.dart';
 import 'package:workout_app/screens/auth/authscreen.dart';
 import 'package:workout_app/screens/auth/register/registerscreen.dart';
 import 'package:workout_app/screens/home/homescreen.dart';
+import 'package:workout_app/screens/invite-person/invitescreen.dart';
 import 'package:workout_app/screens/timetable/timetablescreen.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -28,12 +30,20 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => TimetableScreen());
       break;
     case ResetPswdRoute:
-return PageTransition(
-        child: RegScreen(),
+      return PageTransition(
+        child: ResetScreen(),
         type: PageTransitionType.rightToLeft,
         duration: Duration(milliseconds: 500),
       );
       break;
+    case InviteRoute:
+      return PageTransition(
+        child: InviteScreen(),
+        type: PageTransitionType.leftToRight,
+        duration: Duration(milliseconds: 500),
+      );
+      break;
+
     default:
       MaterialPageRoute(builder: (context) => HomeScreen());
   }

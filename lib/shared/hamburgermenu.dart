@@ -24,15 +24,10 @@ Future postData() async {
   print('Response body: ${resp.body}');
   var jsonResponse = null;
   jsonResponse = json.decode(resp.body);
-  print(jsonResponse['username']);
+  print(jsonResponse);
   return jsonResponse;
-  // if (resp.statusCode == 200) {
-  //   return 'true';
-  // } else {
-  //   return resp.body;
-  // }
-}
 
+}
 
 class HamburgerMenu extends StatefulWidget {
   @override
@@ -42,6 +37,7 @@ class HamburgerMenu extends StatefulWidget {
 class _HamburgerMenuState extends State<HamburgerMenu> {
   String firstName = '';
   String lastName = '';
+  bool _trainer = false;
 
   @override
   void initState() {
@@ -49,7 +45,9 @@ class _HamburgerMenuState extends State<HamburgerMenu> {
           setState(() {
             firstName = value['firstname'];
             lastName = value['lastname'];
-          })
+            _trainer = value['trainer'];
+          }),
+          print(_trainer)
         });
 
     print(firstName);
@@ -62,45 +60,62 @@ class _HamburgerMenuState extends State<HamburgerMenu> {
         color: Colors.black,
         child: ListView(
           // padding: EdgeInsets.zero,
-          children: <Widget>[
+          children: [
+            // if( _trainer == true)
             DrawerHeader(
               child: Text("${firstName} ${lastName}"),
               decoration: BoxDecoration(
                 color: MainColor,
               ),
             ),
+
             ListTile(
               leading: Icon(
-                Icons.exit_to_app,
+                Icons.account_circle,
                 color: MainColor,
               ),
               title: Text(
-                'Logout',
+                "menu-profile".tr().toString(),
                 style: TextStyle(color: Colors.white),
               ),
-              onTap:()async{
-                  SharedPreferences pref = await SharedPreferences.getInstance();
-  pref.remove('token');
-  Navigator.pushNamedAndRemoveUntil(context, LoginRoute, (r) => false);
-}
+              onTap: () => {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AuthScreen(),
+                    ))
+              },
             ),
-            // ListTile(
-            //   leading: Icon(
-            //     Icons.account_circle,
-            //     color: MainColor,
-            //   ),
-            //   title: Text(
-            //     "login-btn-text".tr().toString(),
-            //     style: TextStyle(color: Colors.white),
-            //   ),
-            //   onTap: () => {
-            //     Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //           builder: (context) => AuthScreen(),
-            //         ))
-            //   },
-            // )
+            if (_trainer == true)
+              ListTile(
+                leading: Icon(
+                  Icons.supervisor_account,
+                  color: MainColor,
+                ),
+                title: Text(
+                  "menu-invite".tr().toString(),
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, InviteRoute);
+                },
+              ),
+            ListTile(
+                leading: Icon(
+                  Icons.exit_to_app_sharp,
+                  color: MainColor,
+                ),
+                title: Text(
+                  'menu-logout'.tr().toString(),
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () async {
+                  SharedPreferences pref =
+                      await SharedPreferences.getInstance();
+                  pref.remove('token');
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, LoginRoute, (r) => false);
+                }),
           ],
         ),
       ),
