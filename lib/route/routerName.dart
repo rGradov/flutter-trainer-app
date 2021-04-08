@@ -4,3 +4,6 @@ const String RegisterRoute = '/register';
 const String TimeTableRoute = '/timetable';
 const String ResetPswdRoute = '/resetpswd';
 const String InviteRoute = '/invite';
+const String LoaderRoute = '/loader';
+const String ProfileRoute = '/profile';
+const String NontificationRoute = '/nontific';

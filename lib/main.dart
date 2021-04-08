@@ -20,7 +20,7 @@ void main() async {
   final token = await sharedPreferences.getString("token");
   print(token);
   if (token != null) {
-    defRoute = HomeRoute;
+    defRoute = LoaderRoute;
   } else {
     defRoute = LoginRoute;
   }

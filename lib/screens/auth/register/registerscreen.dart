@@ -342,7 +342,7 @@ class _RegScreenState extends State<RegScreen> {
                   });
                   _clearForm();
                   Navigator.pushNamedAndRemoveUntil(
-                      context, HomeRoute, (r) => false);
+                      context, LoaderRoute, (r) => false);
                 } else {
                   setState(() {
                     status = !status;

@@ -36,5 +36,14 @@
   "Already sent": "Already sent",
   "invite-btn": "Invite",
   "history": "History",
-  "send-invite":"Send invite"
+  "send-invite": "Send invite",
+  "accepted-list-user": "Confirmed invite",
+  "menu-nontific": "Notification",
+  "cancel-btn": "Cancel",
+  "delete-btn": "Delete",
+  "apply-btn": "Apply",
+  "apply": "Are you want to apply invite from",
+  "empty-field": "You dont have invites",
+  "cancel": "Are you want to delete invite from",
+  "invite-field": "Invites"
 }

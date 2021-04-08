@@ -29,7 +29,7 @@ Future<String> postData(String email, String password) async {
     body: jsonEncode(<String, String>{
       'email': email,
       'password': password,
-      'userId':userId,
+      'userId': userId,
     }),
   );
   print(resp.statusCode);
@@ -40,6 +40,7 @@ Future<String> postData(String email, String password) async {
     // print(jsonResponse['token']);
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString("token", jsonResponse['token']);
+
     print(sharedPreferences.getString("token"));
     return 'true';
   } else {
@@ -202,7 +203,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   status = !status;
                 });
                 Navigator.pushNamedAndRemoveUntil(
-                    context, HomeRoute, (r) => false);
+                    context, LoaderRoute, (r) => false);
               } else {
                 setState(() {
                   status = !status;

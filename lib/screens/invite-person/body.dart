@@ -18,7 +18,7 @@ Future list() async {
   final resp = await http.get(
     Uri.http(ApiUrl, 'api/user'),
     headers: <String, String>{
-      HttpHeaders.authorizationHeader: "Bearer ${token}"
+      HttpHeaders.authorizationHeader: "Bearer ${token}",
     },
   );
   print('Response status: ${resp.statusCode}');
@@ -66,7 +66,8 @@ class InviteBody extends StatefulWidget {
 class _InviteBodyState extends State<InviteBody> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   TextEditingController _userNameController = TextEditingController();
-  List _items = ['', ''];
+  List _items = [];
+  List _acceptInvite = [];
   bool status = true;
   Widget _inputUserName() {
     return Container(
@@ -135,15 +136,30 @@ class _InviteBodyState extends State<InviteBody> {
                   status = !status;
                 });
                 list().then((value) => {
-          setState(() {
-            _items = value['invitesTo'];
-          }),
-          print(_items),
-        });
+                      setState(() {
+                        _items = value['invitesTo'];
+                      }),
+                      print(_items),
+                    });
               } else {
                 setState(() {
                   status = !status;
                 });
+                if (body.toString() == 'Not found') {
+                  final snackBar = SnackBar(
+                    content: Text(body.toString().tr().toString()),
+                    action: SnackBarAction(
+                      label: 'ok'.tr().toString(),
+                      onPressed: () {},
+                      // formkey.currentState.reset();
+                      // _pswdController.clear();
+                    ),
+                  );
+
+                  // Find the ScaffoldMessenger in the widget tree
+                  // and use it to show a SnackBar.
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
                 final snackBar = SnackBar(
                   content: Text(body.toString().tr().toString()),
                   action: SnackBarAction(
@@ -172,11 +188,11 @@ class _InviteBodyState extends State<InviteBody> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: Text('send-invite'.tr().toString(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20),),
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Text(
+              'send-invite'.tr().toString(),
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
           ),
           Padding(
             padding: EdgeInsets.only(bottom: 20, top: 20),
@@ -185,27 +201,6 @@ class _InviteBodyState extends State<InviteBody> {
           SizedBox(
             height: 20,
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 20, right: 20),
-            child: Container(
-              height: 50,
-              // width: MediaQuery.of(context).size.width,
-              child: _ProgressButton(),
-            ),
-
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: Text(
-                  'history'.tr().toString(),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    ),),
-          )
         ],
       ),
     );
@@ -216,54 +211,148 @@ class _InviteBodyState extends State<InviteBody> {
     list().then((value) => {
           setState(() {
             _items = value['invitesTo'];
+            _acceptInvite = value['acceptedInvitesTo'];
           }),
           print(_items),
+          print(_acceptInvite)
         });
     super.initState();
   }
-Widget buildBody(BuildContext ctxt, int index) {
-  return  Padding(
-      padding: EdgeInsets.only(left: 20, right: 20,bottom: 8),
-    child: Container(
-      width: MediaQuery.of(context).size.width,
-      height: 50,
-      decoration: BoxDecoration(
-        color: MainColor,
-        border: Border.all(
-          color: MainColor,
-        )
-        
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(top:10.0,left: 10,right: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(_items[index],style: TextStyle(color: Colors.white,fontSize: 15)),
-            Text('')
-          ],
+
+  Widget buildAccept(BuildContext ctxt, int index) {
+    return Padding(
+      padding: EdgeInsets.only(left: 20, right: 20, bottom: 8),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        // height: ,
+        decoration: BoxDecoration(
+            color: MainColor,
+            border: Border.all(
+              color: Colors.green,
+            )),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10.0, left: 10, right: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(_acceptInvite[index],
+                  style: TextStyle(color: Colors.white, fontSize: 15)),
+              Text(
+                  '${_acceptInvite[index]} ${"accepted-list-user".tr().toString()}')
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          _form(),
-          SizedBox(
-            height: 20,
+    );
+  }
+
+  Widget buildBody(BuildContext ctxt, int index) {
+    return Padding(
+      padding: EdgeInsets.only(left: 20, right: 20, bottom: 8),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        // height: ,
+        decoration: BoxDecoration(
+            color: MainColor,
+            border: Border.all(
+              color: MainColor,
+            )),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10.0, left: 10, right: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(_items[index],
+                  style: TextStyle(color: Colors.white, fontSize: 15)),
+              Text('')
+            ],
           ),
-          Expanded(
-            child: ListView.builder(
-                itemCount: _items.length,
-                 itemBuilder: (BuildContext ctxt, int index) => buildBody(ctxt, index),
-                  
-                ),
-          ),
-        ],
+        ),
       ),
     );
+  }
+
+  Widget _btn() {
+    return Padding(
+      padding: EdgeInsets.only(left: 20, right: 20),
+      child: Container(
+        height: 50,
+        // width: MediaQuery.of(context).size.width,
+        child: _ProgressButton(),
+      ),
+    );
+  }
+
+  Widget _history() {
+    return Padding(
+      padding: EdgeInsets.only(left: 20, right: 20),
+      child: Text(
+        'history'.tr().toString(),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+        ),
+      ),
+    );
+  }
+
+  Widget build(BuildContext context) {
+    return _items.isNotEmpty || _acceptInvite.isNotEmpty
+        ? Container(
+            child: Column(
+              children: [
+                _form(),
+                SizedBox(
+                  height: 20,
+                ),
+                _btn(),
+                SizedBox(
+                  height: 20,
+                ),
+                _history(),
+                SizedBox(
+                  height: 20,
+                ),
+                Expanded(
+                  flex: 1,
+                  child: ListView.builder(
+                    itemCount: _acceptInvite.length,
+                    itemBuilder: (BuildContext ctxt, int index) =>
+                        buildAccept(ctxt, index),
+                  ),
+                ),
+                // Expanded(
+                //   flex: 3,
+                //   child: ListView.builder(
+
+                //     itemCount: _items.length,
+                //     itemBuilder: (BuildContext ctxt, int index) =>
+                //         buildBody(ctxt, index),
+                //   ),
+                // ),
+              ],
+            ),
+          )
+        : Container(
+            child: Column(
+              children: [
+                _form(),
+                SizedBox(
+                  height: 20,
+                ),
+                _btn(),
+                SizedBox(
+                  height: 20,
+                ),
+                _history(),
+                SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ],
+            ),
+          );
   }
 }

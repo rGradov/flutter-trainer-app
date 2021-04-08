@@ -10,9 +10,25 @@ import 'package:http/http.dart' as http;
 
 import 'package:workout_app/screens/auth/authscreen.dart';
 
+Future getData() async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  final String email = sharedPreferences.getString("email");
+  final bool trainer = sharedPreferences.getBool("trainer");
+  final String lastname = sharedPreferences.getString("lastname");
+  final String firstname = sharedPreferences.getString("firstname");
+  var map = {
+    'email': email,
+    'trainer': trainer,
+    'lastname': lastname,
+    'firstname': firstname,
+  };
+  return map;
+}
+
 Future postData() async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   final String token = sharedPreferences.getString("token");
+
   print(token);
   final resp = await http.get(
     Uri.http(ApiUrl, 'api/user'),
@@ -36,21 +52,23 @@ class HamburgerMenu extends StatefulWidget {
 class _HamburgerMenuState extends State<HamburgerMenu> {
   String firstName = '';
   String lastName = '';
+  String email;
   bool _trainer = false;
-  var myCustomUniqueUserId = "something from my backend server";
 
   @override
   void initState() {
-    postData().then((value) => {
+    getData().then((value) => {
+          print(value),
           setState(() {
+            email = value['email'];
+            _trainer = value['trainer'];
             firstName = value['firstname'];
             lastName = value['lastname'];
-            _trainer = value['trainer'];
           }),
           print(_trainer)
         });
 
-    print(firstName);
+    print(email);
     super.initState();
   }
 
@@ -64,6 +82,7 @@ class _HamburgerMenuState extends State<HamburgerMenu> {
             // if( _trainer == true)
             DrawerHeader(
               child: Text("${firstName} ${lastName}"),
+              // child: Text("${email}"),
               decoration: BoxDecoration(
                 color: MainColor,
               ),
@@ -79,11 +98,7 @@ class _HamburgerMenuState extends State<HamburgerMenu> {
                 style: TextStyle(color: Colors.white),
               ),
               onTap: () => {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AuthScreen(),
-                    ))
+                Navigator.pushNamed(context, ProfileRoute),
               },
             ),
             if (_trainer == true)
@@ -100,6 +115,21 @@ class _HamburgerMenuState extends State<HamburgerMenu> {
                   Navigator.pushNamed(context, InviteRoute);
                 },
               ),
+                 if(_trainer == false)
+            ListTile(
+              leading: Icon(
+                Icons.notifications,
+                color: MainColor,
+              ),
+           
+              title: Text(
+                "menu-nontific".tr().toString(),
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, NontificationRoute);
+              },
+            ),
             ListTile(
                 leading: Icon(
                   Icons.exit_to_app_sharp,
